@@ -21,7 +21,7 @@ export class sideBarComponent {
   private currentUser;
   private showClass;
   private users;
-  baseUrl = 'http://laravel.didyu.local/';
+  baseUrl = 'http://13.234.116.80:4206/';
   constructor(private router: Router, private http: HttpClient, private oktaAuth: OktaAuthService, private globals: Globals){
     this.init();
     this.checkIsLogin();

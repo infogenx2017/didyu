@@ -19,7 +19,7 @@ export class changePasswordComponent {
   private alertMessage;
   private password;
   private cpassword;
-  baseUrl = 'http://laravel.didyu.local/';
+  baseUrl = 'http://13.234.116.80:4206/';
   constructor(private router: Router, private http: HttpClient,private oktaAuth: OktaAuthService, private globals: Globals){
     this.init();
     
