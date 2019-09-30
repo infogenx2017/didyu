@@ -1,0 +1,267 @@
+<style>
+  select, textarea, input{
+      font-size: 1rem !important;
+      color: #6e707e !important;
+  }
+  .cancelButton{
+      margin-left: 6%;
+  }
+</style>
+<div class="row text-center calendarTop">
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Previous
+      </div>
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+        Today
+      </div>
+      <div
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Next
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Month)"
+        [class.active]="view === CalendarView.Month"
+      >
+        Month
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Week)"
+        [class.active]="view === CalendarView.Week"
+      >
+        Week
+      </div>
+      <div
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+      >
+        Day
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<div [ngSwitch]="view" >
+  <mwl-calendar-month-view
+    *ngSwitchCase="CalendarView.Month"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    [activeDayIsOpen]="activeDayIsOpen"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="CalendarView.Week"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="CalendarView.Day"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
+  </mwl-calendar-day-view>
+</div>
+
+<!-- Everything you see below is just for the demo, you don't need to include it in your app -->
+
+<br /><br /><br />
+
+
+
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Event action occurred</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Action:
+      <pre>{{ modalData?.action }}</pre>
+    </div>
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      OK
+    </button>
+  </div>
+</ng-template>
+
+
+
+
+
+<div *ngIf="editTask" >
+  <div class="overlay-bg"></div>
+  <div class="createPopup">
+  <div class="container-fluid create-task">
+                      <div class="card shadow mb-4 list">
+                          <div class="card-header py-3">
+                              <div class="row">
+                                  <div class="col-md-8">
+                                      <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i> Edit task</h6>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="card-body input-border">
+                              <div class="row">
+                                  <div class="col-md-12 col-lg-12">     
+                                  <div class="form-group">
+                                      <div class="row row-mat-top">
+                                          <div class="col-md-12">
+                                          <!-- <input type="text" (ngModel)="etitle" (input)="etitle=$event.target.value"  class="form-control" name="t" placeholder="Enter the title here..." [value]="etitle" [readonly]="role!='admin'"> -->
+                                          <select (ngModel)="mcat" (input)="mcat=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " *ngIf="categories" [value]="mcat" [disabled]="role!='admin'">
+                                            <option value="">Please choose category</option>
+                                            <option *ngFor="let cat of categories" value="{{cat.id}}">{{cat.name}}</option>
+                                        </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="row row-mat-top">
+                                        <div class="col-md-12">
+                                            <select [(ngModel)]="etitle" (input)="etitle=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " [disabled]="role!='admin'">
+                                                <option value="">Please choose title</option>
+                                                <option *ngFor="let title of titles|catFilter:mcat" value="{{title.name}}">{{title.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="form-group">
+                                      <div class="row row-mat-top">
+                                          <div class="col-md-12">
+                                          <textarea (ngModel)="edescription" (input)="edescription=$event.target.value" class="form-control" name="t" placeholder="Write details about the task..." [value]="edescription" [readonly]="role!='admin'"></textarea>
+                                          </div>
+                                      </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6">     
+                                      <div class="form-group">
+                                          <div class="row row-mat-top">
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Assign to</label>
+                                              </div>
+                                              <div class="col-md-8">
+                                                  <select [(ngModel)]="eassignee" (input)="eassignee=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to" *ngIf="assignee" [disabled]="role!='admin'">
+                                                      <option *ngFor="let assig of assignee" value="{{assig.id}}" >{{assig.name}}</option>
+                                                  </select>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="row row-mat-top">
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Priority</label>
+                                              </div>
+                                              <div class="col-md-8">
+                                                  <select [(ngModel)]="epriority" (input)="epriority=$event.target.value"   class="form-control" name="t" placeholder="Priority" *ngIf="priority"  [disabled]="role!='admin'">
+                                                      <option *ngFor="let pri of priority" value="{{pri.id}}">{{pri.name}}</option>
+                                                  </select>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="row row-mat-top">
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Due date</label>
+                                              </div>
+                                              <div class="col-md-8">
+                                                  <input type="text" class="form-control" [ngModel]="eduedate" #datePicker4 (input)="eduedate=$event.target.value" bsDatepicker (ngModelChange)="eduedate = datePicker4.value" [value]="eduedate| date:'yyyy-MM-dd'" readonly>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="row row-mat-top">
+                                              <div class="col-md-4">
+                                                  <label class="form-label">Recurring</label>
+                                              </div>
+                                              <div class="col-md-8">
+                                                  <select [(ngModel)]="etype" (input)="etype=$event.target.value" class="form-control" name="t" placeholder="Type" *ngIf="type"  [disabled]="role!='admin'">
+                                                      <option *ngFor="let ty of type" value="{{ty.id}}">{{ty.name}}</option>
+                                                  </select>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6 col-lg-6">     
+                                          
+                                          <div class="form-group">
+                                              <div class="row row-mat-top">
+                                                  <div class="col-md-4">
+                                                      <label class="form-label">Status</label>
+                                                  </div>
+                                                  <div class="col-md-8">
+                                                      <select [(ngModel)]="estatus" (input)="estatus=$event.target.value" class="form-control" name="t" placeholder="Status" *ngIf="status">
+                                                          <option *ngFor="let st of status" value="{{st.id}}" >{{st.name}}</option>
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <div class="row row-mat-top">
+                                                  <div class="col-md-4">
+                                                      <label class="form-label">Reminder date</label>
+                                                  </div>
+                                                  <div class="col-md-8">
+                                                      <input type="text" class="form-control" [ngModel]="ereminderdate" #datePicker6 (input)="ereminderdate=$event.target.value" bsDatepicker (ngModelChange)="ereminderdate = datePicker6.value" [value]="ereminderdate| date:'yyyy-MM-dd'" readonly>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  <div class="col-md-6 col-lg-6">
+                                      <div class="text-left">
+                                      <button type="submit" class="btn btn-success" (click)="save()">SAVE &amp;  CLOSE</button>
+                                      <button type="submit" class="btn btn-danger cancelButton"  (click)="cancel()">CANCEL</button>
+                                      </div>                                  
+                                  </div> 
+                              </div>
+                          </div>
+                      </div>
+                  </div>   
+                  </div>
+                  </div>
+                  
+<div id="snackbar">{{alertMessage}}</div>

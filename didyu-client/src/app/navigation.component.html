@@ -1,0 +1,122 @@
+<style>
+    input {
+        color: #cbcaca!important;
+    }
+</style>
+<nav class="navbar navbar-expand navbar-light bg-white topbar static-top">
+        
+        
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow d-sm-none">
+                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                    <form class="form-inline mr-auto w-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small search-input-border" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-primary-search" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </li>
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="nav-item dropdown no-arrow mx-1 cursorPointer zin" routerLink="/calendar" title="Calendar">
+                <a class="nav-link dropdown-toggle"  id="alertsDropdown" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-calendar far-font-css" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="nav-item dropdown no-arrow mx-1 cursorPointer zin" *ngIf="role=='admin'" (click)="setshowCreateTask()" title="Create new task">
+                <a class="nav-link dropdown-toggle"  id="alertsDropdown" role="button" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus-circle far-font-css" aria-hidden="true"></i>
+                </a>
+            </li>
+            <!-- <div class="topbar-divider d-none d-sm-block" *ngIf="role=='admin'"></div>
+            <li class="nav-item no-arrow mx-1 cursorPointer">
+                <a class="nav-link"  role="" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-glass-martini far-font-css"></i>
+                </a>
+            </li> -->
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="nav-item dropdown no-arrow mx-1 height-css cursorPointer" (click)="changeNotification()"  (clickOutside)="onClickedOutsideNotification($event)">
+                    <a class="nav-link dropdown-toggle" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell fa-fw far-font-css"></i>
+                    <span class="badge badge-danger badge-counter" *ngIf="userNotifications">{{userNotifications.length}}</span>
+                    </a>
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" [ngClass]="{'show':showNotifications}">
+                        <div class="row">
+                            <div class="col-md-6 tabs-sty">
+                                <h6 class="dropdown-header">
+                                    Notifications
+                                </h6>
+                            </div>
+                            <div class="col-md-6 tabs-sty">
+                                <h6 class="dropdown-header">
+                                    <!-- <i class="fas fa-glass-martini"></i> -->
+                                </h6>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="scroll-y">
+                            <a class="dropdown-item d-flex align-items-center" *ngFor="let notification of userNotifications" >
+                                <!-- <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </div>
+                                </div> -->
+                                <div>
+                                    <!-- <div class="small text-gray-500">a few second ago</div> -->
+                                    <div class="member-sty-css">Member 1 added a task</div>
+                                    <span class="fa-calendar-alt-css"><i class="fas fa-calendar-alt fa-calendar-alt-css"></i> {{notification.created_at| date : 'dd MMM,yyyy'}}</span><br>
+                                    <span class="font-weight-bold">"{{notification.title}}"</span>
+                                </div>
+                            </a>                       
+                        </div>
+                    </div>
+                </li>
+                
+
+              <div class="topbar-divider d-none d-sm-block"></div>
+
+              <li class="nav-item dropdown no-arrow mx-1" (clickOutside)="onClickedOutsideSetting($event)" *ngIf="role=='admin'" >
+                <a class="nav-link dropdown-toggle cursorPointer" (click)="openSetting()" id="messagesDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fas fa-cog fa-fw far-font-css"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right logout-sty" [ngClass]="{'show':showSettings}" aria-labelledby="messagesDropdown2">                    
+                  <a class="dropdown-item far-tt cursorPointer" *ngIf="role=='admin'" routerLink="/category">Add category</a>
+                  <a class="dropdown-item far-tt cursorPointer" *ngIf="role=='admin'" routerLink="/title">Add title</a>
+                </div>
+              </li>
+
+              <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="nav-item dropdown no-arrow mx-1" *ngIf="currentUser" (clickOutside)="onClickedOutside($event)">
+                <a class="nav-link dropdown-toggle cursorPointer" (click)="openUserAccount()" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <img class="img-profile rounded-circle" src="assets/img/user.png">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{currentUser.name}}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right logout-sty" [ngClass]="{'show':showUserAccount}" aria-labelledby="messagesDropdown">
+                    <div>
+                        <div class="dropdown-item useraccsettings cursorPointer"><i class="fa fa-envelope far-top" aria-hidden="true"></i>  {{currentUser.email}}</div>
+                        <div class="dropdown-item useraccsettings cursorPointer"><i class="fa fa-user far-top" aria-hidden="true"></i>  {{currentUser.name}}</div>
+                    </div>
+                  <a class="dropdown-item far-tt cursorPointer" *ngIf="role=='admin'" (click)="toUsers()">Members Activation</a>
+                  <a class="dropdown-item far-tt cursorPointer" (click)="changePass()">Change Password</a>
+                  <a class="dropdown-item far-tt cursorPointer" (click)="logout()">Sign Out</a>
+                </div>
+              </li>
+              
+            
+        </ul>
+        
+        <div *ngIf="showCreateTask" >
+            <div class="overlay-bg"></div>
+            <div class="createPopup">
+                <createtask-root (closePopup)='setshowCreateTask($event)' ></createtask-root>
+            </div>
+        </div>
+        
+    </nav>

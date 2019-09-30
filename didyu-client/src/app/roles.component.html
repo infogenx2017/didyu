@@ -1,0 +1,74 @@
+<div class="container-main">
+                    <div class="breadcrumb">
+                        <div class="col-md-4">
+                            <ol class="breadcrumb breadcrumb1">
+                                <li class="breadcrumb-item active">
+                                    <a href="#"> Roles</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+ <div class="container-fluid">
+                    <div class="card shadow mb-4 list">
+                        <div class="card-header py-3">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i> Add Role</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body input-border">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6">     
+                                  <div class="form-group">
+                                  <div class="row row-mat-top">
+                                  <div class="col-md-4">
+                                  <label class="form-label">Name</label>
+                                  </div>
+                                  <div class="col-md-8">
+                                  <input type="text" ng-model="name" class="form-control" name="t" placeholder="Name">
+                                  </div>
+                                  </div>
+                                  </div>
+                                 </div>
+                                  <div class="col-md-12 col-lg-12">
+                                  <div class="text-left">
+                                  <button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+                                  </div>
+                                  </div> 
+                              </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="container-fluid">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i>Roles</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">                             
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-none border-none-1" align="left">Role</th>
+                                            <th class="border-none" align="center">Edit</th>
+                                            <th class="border-none" align="center">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>This is the title of the task....</td>
+                                            <td align="center"><a data-container="body" data-toggle="popover" data-placement="bottom"><i class="fas fa-pencil-alt"></i></a></td>
+                                            <td align="center"><a data-container="body" data-toggle="popover" data-placement="bottom"><i class="fas fa-trash-alt"></i></a></td>
+                                        </tr>                                       
+                                    </tbody>
+                                </table>
+                            </div>  
+                        </div>
+                    </div>
+                </div>

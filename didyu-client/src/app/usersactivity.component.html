@@ -1,0 +1,81 @@
+<div class="container-main">
+    <div class="breadcrumb">
+       <div class="col-md-4">
+          <ol class="breadcrumb breadcrumb1">
+             <li class="breadcrumb-item active">
+                <a href="#"> User Profile</a>
+             </li>
+          </ol>
+       </div>
+    </div>
+ </div>
+ <div class="container-fluid">
+    <div class="card shadow mb-4">
+       <div class="card-header py-3">
+          <div class="row">
+             <div class="col-md-6">
+                <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i> User Profile</h6>
+             </div>
+          </div>
+       </div>
+       <div class="card-body input-border" *ngIf="currentUser">
+        <div class="row">
+            <div class="col-md-6 col-lg-6">     
+              <div class="form-group">
+                <div class="row row-mat-top">
+                    <div class="col-md-4">
+                        <label class="form-label">Name</label>
+                    </div>
+                    <div class="col-md-8">
+                        {{currentUser.name}}
+                    </div>
+                </div>
+              </div>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6">     
+                <div class="form-group">
+                    <div class="row row-mat-top">
+                        <div class="col-md-4">
+                            <label class="form-label">Email</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{currentUser.email}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-md-6 col-lg-6">     
+                <div class="form-group">
+                    <div class="row row-mat-top">
+                        <div class="col-md-4">
+                            <label class="form-label">Mobile Number</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{currentUser.mobile}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6">     
+                <div class="form-group">
+                    <div class="row row-mat-top">
+                        <div class="col-md-4">
+                            <label class="form-label">Role</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{currentUser.role}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+ </div>
+ <div id="snackbar">{{alertMessage}}</div>

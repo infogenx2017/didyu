@@ -1,0 +1,281 @@
+<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search searchBar">
+    <div class="input-group mb-8">
+        <input type="text" class="form-control bg-light border-0 small search-input-border form-control-sty1 searchtextt" placeholder="Search Task..." aria-label="Search" aria-describedby="basic-addon2" (ngModel)="searchTask" (input)="searchTask=$event.target.value">
+        <div class="input-group-append">
+            <div class="input-group-text input-sty-css"><i class="fas fa-search fa-sm"></i></div>
+        </div>
+    </div>
+</form>
+
+<div class="container-main">
+    <div class="breadcrumb">
+       <div class="col-md-3">
+            
+          <ol class="breadcrumb breadcrumb1">
+             <li class="breadcrumb-item tsb" [ngClass]="{'active':(router.url=='/tasks' || router.url=='/dashboard')}">
+                <a routerLink="/tasks"> Task list</a>
+             </li>
+             <li class="breadcrumb-item tab2 tsb" [ngClass]="{'active':router.url=='/summary'}">
+                <a routerLink="/summary">Summary</a>
+            </li>
+            <li class="breadcrumb-item tab3 tsb" [ngClass]="{'active':router.url=='/report'}">
+                <a routerLink="/report">Reports</a>
+            </li>
+          </ol>
+       </div>
+       <div class="border-line-css"></div>
+        <div  class="col-md-6">
+            <a class="btn btn-secondary btn-icon-split" [ngStyle]="assignColor(count.color)" *ngFor="let count of taskCount">
+            <span class="text">{{count.name}}</span>
+            <span class="icon text-white-50">
+            <i class="fas">{{count.taskCount}}</i>
+            </span>
+            </a>
+        </div>
+        <div class="border-line-css"></div>
+        <div  class="col-md-2 marginLeft2">
+            <span class="mr-2 d-lg-inline text-gray-6001 small text-right pull-right"><span class="span-color-sty">Today</span><br>{{currentDate| date : 'dd MMM yyyy'}}</span>
+        </div>
+    </div>
+ </div>
+ <div class="container-fluid">
+    <div class="card shadow mb-4 mangingtask">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i> {{currentPage}}</h6>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="input-group mb-2 ">
+
+                            <input type="text" #datePicker class="form-control" [ngModel]="fduedate" (input)="fduedate=$event.target.value" bsDatepicker placeholder="Date Wise Search"
+                            
+                            (ngModelChange)="fduedate = datePicker.value" readonly> 
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group mb-2 ">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text border-remove-left"><i class="fas fa-glass-martini far-font-css1"></i></div>
+                            </div>
+                            <select class="selectpicker form-control border-remove-right" (ngModel)="filterTask" (input)="filterTask=$event.target.value">
+                                <option value="">ALL TASKS</option>
+                                <option value="INPROGRESS">INPROGRESS</option>
+                                <option value="OVERDUE">OVERDUE</option>
+                                <option value="COMPLETED">COMPLETED</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 col-md-1-mobile " (click)="printTasks()" *ngIf="(router.url=='/summary'||router.url=='/report')">
+                    <i class="fas fa-print"></i>
+                </div>
+            </div>
+        </div>
+        <!-- card-header Stop -->	
+        <div class="card-body" id="print">
+            <!-- card-body Start -->
+            <div class="table-responsive">
+                <!-- Table Start -->
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="border-none border-none-1" align="left">TASK NAME</th>
+                            <th class="border-none" align="center">RESPONSIBLE</th>
+                            <th class="border-none" align="center">PROIRITY</th>
+                            <th class="border-none" align="center">DUE DATE </th>
+                            <th class="border-none" align="center">STATUS</th>
+                            <th class="border-none" align="center">DESCRIPTION</th>
+                            <th class="border-none" align="center" *ngIf="role=='admin'">DELETE</th>
+                            <th class="border-none" align="center">NOTE</th>
+                        </tr>                        
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let task of tasks|customFilter:filterTask|dateFilter:fduedate|titleFilter:searchTask; let idx = index" class="odd">
+                            <td class="tasklist" (click)="showEditTask(task)">{{task.title}}</td>
+                            <td align="center" class="tasklist"><span class="table-css-img-left"><img src="assets/img/person-small.jpg" class="person-small"></span>{{task.assignee}}</td>
+                            <td class="low-css tasklist" [ngStyle]="assignPriorityColor(task.priorityColor)">{{task.priority}}</td>
+                            <td class="tasklist">{{task.due_date| date : 'dd-MM-yyyy'}}</td>
+                            <td class="low-css1 tasklist" [ngStyle]="assignColor(task.statusColor)">{{task.status}}</td>
+                            <td class="tasklist" align="center">{{task.description}}</td>
+                            <td align="center" class="cursorPointer tasklist" (click)="deleteTask(task.id)" *ngIf="role=='admin'"><i class="fas fa-trash" data-container="body" data-toggle="popover" data-placement="bottom"></i></td>
+                            <td class="tasklist" align="center" id="task{{task.id}}"><a data-container="body" data-toggle="popover" data-placement="bottom" data-original-title="" title="" style="color:inherit;" (click)="toggleNote(task.id,idx)"><i class="fas fa-file-alt"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+ <div id="snackbar">{{alertMessage}}</div>
+
+ <div class="popover fade show bs-popover-top" role="tooltip" id="notePopupId" style="position: absolute;  top: 0px; left: 0px; will-change: transform;" x-placement="top"  *ngIf="notePopup" [ngStyle]="translateHeight">
+     <div class="arrow" style="left: 419px;"></div>
+     <h3 class="popover-header"></h3>
+     <div class="popover-body">
+         <div class="media">
+             <div class="media-body"> 
+                 <input type="text" class="form-control form-control-popup" name="example-text-input" placeholder="Make Your note here related to this task...  |" (ngModel)="snote" (input)="snote=$event.target.value"> 
+            </div>
+            <i class="fa fa-check fa-check-sty" (click)="clearNotePopup()" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+ <style>
+    select, textarea, input{
+        font-size: 1rem !important;
+        color: #6e707e !important;
+    }
+    .cancelButton{
+        margin-left: 6%;
+    }
+</style>
+<div *ngIf="editTask" >
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+    <div class="container-fluid create-task">
+                        <div class="card shadow mb-4 list">
+                            <div class="card-header py-3">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i> Edit task</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body input-border">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-12">     
+                                    <div class="form-group">
+                                        <div class="row row-mat-top">
+                                            <div class="col-md-12">
+                                                <select (ngModel)="mcat" (input)="mcat=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " *ngIf="categories" [value]="mcat" [disabled]="role!='admin'">
+                                                    <option value="">Please choose category</option>
+                                                    <option *ngFor="let cat of categories" value="{{cat.id}}">{{cat.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row row-mat-top">
+                                            <div class="col-md-12">
+                                                <select [(ngModel)]="etitle" (input)="etitle=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " [disabled]="role!='admin'">
+                                                    <option value="">Please choose title</option>
+                                                    <option *ngFor="let title of titles|catFilter:mcat" value="{{title.name}}">{{title.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row row-mat-top">
+                                            <div class="col-md-12">
+                                            <textarea (ngModel)="edescription" (input)="edescription=$event.target.value" class="form-control" name="t" placeholder="Write details about the task..." [value]="edescription" [readonly]="role!='admin'"></textarea>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">     
+                                        <div class="form-group">
+                                            <div class="row row-mat-top">
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Assign to</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select [(ngModel)]="eassignee" (input)="eassignee=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to" *ngIf="assignee" [disabled]="role!='admin'">
+                                                        <option *ngFor="let assig of assignee" value="{{assig.id}}">{{assig.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row row-mat-top">
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Priority</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select [(ngModel)]="epriority" (input)="epriority=$event.target.value"   class="form-control" name="t" placeholder="Priority" *ngIf="priority"  [disabled]="role!='admin'">
+                                                        <option *ngFor="let pri of priority" value="{{pri.id}}">{{pri.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row row-mat-top">
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Due date</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" [ngModel]="eduedate" #datePicker4 (input)="eduedate=$event.target.value" bsDatepicker (ngModelChange)="eduedate = datePicker4.value" [value]="eduedate| date:'yyyy-MM-dd'" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row row-mat-top">
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Recurring</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select [(ngModel)]="etype" (input)="etype=$event.target.value" class="form-control" name="t" placeholder="Type" *ngIf="type"  [disabled]="role!='admin'">
+                                                        <option *ngFor="let ty of type" value="{{ty.id}}">{{ty.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">     
+                                            <div class="form-group">
+                                                <div class="row row-mat-top">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Status</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select [(ngModel)]="estatus" (input)="estatus=$event.target.value" class="form-control" name="t" placeholder="Status" *ngIf="status">
+                                                            <option *ngFor="let st of status" value="{{st.id}}">{{st.name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row row-mat-top">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Reminder date</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" [ngModel]="ereminderdate" #datePicker6 (input)="ereminderdate=$event.target.value" bsDatepicker (ngModelChange)="ereminderdate = datePicker6.value" [value]="ereminderdate| date:'yyyy-MM-dd'" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="row tttnote" *ngIf="showNote">
+                                        <div class="col-md-8 col-lg-8">
+                                            <div class="ttnote">Note : {{currentNote}}</div>
+                                        </div>                       
+                                        <div class="col-md-4 col-lg-4">
+                                            <i class="fas fa-trash cursorPointer" data-container="body" data-toggle="popover" data-placement="bottom" (click)="deleteNote()"></i>
+                                        </div>
+                                        </div>             
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="text-left">
+                                        <button type="submit" class="btn btn-success" (click)="save()">SAVE &amp;  CLOSE</button>
+                                        <button type="submit" class="btn btn-danger cancelButton"  (click)="cancel()">CANCEL</button>
+                                        </div>                                  
+                                    </div>     
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    </div>
+                    </div>
