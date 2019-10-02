@@ -188,7 +188,7 @@ class commonController extends Controller
         }
         else {
             $tasks = task::orderBy('id','desc')->get();
-        }        
+        }         
         foreach($tasks as $task){
             $title = title::where('name',$task->title)->get();
             if(count($title)>0){

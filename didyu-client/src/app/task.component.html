@@ -45,7 +45,7 @@
                 <div class="col-md-3">
                     <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i> {{currentPage}}</h6>
                 </div>
-                <div class="col-md-2"></div>
+                <!-- <div class="col-md-2"></div> -->
                 <div class="col-md-2">
                     <div class="form-group">
                         <div class="input-group mb-2 ">
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <div class="input-group mb-2 ">
                             <div class="input-group-prepend">
@@ -68,6 +68,21 @@
                                 <option value="INPROGRESS">INPROGRESS</option>
                                 <option value="OVERDUE">OVERDUE</option>
                                 <option value="COMPLETED">COMPLETED</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="input-group mb-2 ">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text border-remove-left"><i class="fas fa-glass-martini far-font-css1"></i></div>
+                            </div>
+                            <select class="selectpicker form-control border-remove-right" (ngModel)="filterTaskByPriority" (input)="filterTaskByPriority=$event.target.value">
+                                <option value="">ALL TASKS</option>
+                                <option value="LOW">LOW</option>
+                                <option value="MEDIUM">MEDIUM</option>
+                                <option value="HIGH">HIGH</option>
                             </select>
                         </div>
                     </div>
@@ -96,7 +111,7 @@
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr *ngFor="let task of tasks|customFilter:filterTask|dateFilter:fduedate|titleFilter:searchTask; let idx = index" class="odd">
+                        <tr *ngFor="let task of tasks|customFilter:filterTask|customPriorityFilter:filterTaskByPriority|dateFilter:fduedate|titleFilter:searchTask; let idx = index" class="odd">
                             <td class="tasklist" (click)="showEditTask(task)">{{task.title}}</td>
                             <td align="center" class="tasklist"><span class="table-css-img-left"><img src="assets/img/person-small.jpg" class="person-small"></span>{{task.assignee}}</td>
                             <td class="low-css tasklist" [ngStyle]="assignPriorityColor(task.priorityColor)">{{task.priority}}</td>

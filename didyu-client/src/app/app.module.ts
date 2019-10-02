@@ -24,7 +24,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { OktaAuthModule, OktaCallbackComponent } from '@okta/okta-angular';
 import { Role,registerService } from './register.service';
-import { MyFilterPipe, TitleFilterPipe,CategoryFilterPipe } from './customFilter.js';
+import { MyFilterPipe, MyPriorityFilterPipe, TitleFilterPipe,CategoryFilterPipe } from './customFilter.js';
 import { DateFilterPipe } from './customFilter.js';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
@@ -92,6 +92,7 @@ const appRoutes: Routes = [
     createCategoryComponent,
     createTitleComponent,
     MyFilterPipe,
+    MyPriorityFilterPipe,
     DateFilterPipe,
     TitleFilterPipe,
     CategoryFilterPipe

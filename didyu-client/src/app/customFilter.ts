@@ -16,6 +16,22 @@ export class MyFilterPipe implements PipeTransform {
     }
 }
 
+@Pipe({
+    name: 'customPriorityFilter',
+    pure: false
+})
+export class MyPriorityFilterPipe implements PipeTransform {
+    transform(items: any[], filter: Object): any {
+        if (!items || !filter) {
+            return items;
+        }
+        // filter items array, items which match and return true will be
+        // kept, false will be filtered out
+        console.log('items'+items[0].priority);
+        return items.filter(item => item.priority.indexOf(filter) !== -1);
+    }
+}
+
 
 @Pipe({
     name: 'dateFilter',

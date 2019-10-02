@@ -400,7 +400,7 @@ div[aria-label='I'] {
   background-color: rgb(255, 152, 0) !important;
 }
 
-div[aria-label='I'] div, div[aria-label='C'] div, div[aria-label='E'] div, div[aria-label='O'] div {
+div[aria-label='I'] div, div[aria-label='C'] div, div[aria-label='E'] div, div[aria-label='O'] div, div[aria-label='D'] div {
   padding-left: 25px;
 }
 
@@ -414,6 +414,10 @@ div[aria-label='E'] {
 
 div[aria-label='O'] {
   background-color: rgb(220, 84, 84) !important;
+}
+
+div[aria-label='D'] {
+  background-color: #a1a1a1 !important;
 }
 .zin{
   z-index: 9999;
