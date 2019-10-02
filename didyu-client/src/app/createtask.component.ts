@@ -33,6 +33,33 @@ export class createtaskComponent {
   private mduedate;
   private mreminderdate;notify
   private mexpecteddate;showTextbox;showTitlebox;
+  // for the recurring type every day
+  recurringDay = "every";
+  recurringDayDay = 1;
+  selectedDay;
+  days = [    
+    {name:'Monday', value:'1', checked:false},
+    {name:'Tuesday', value:'2', checked:false},
+    {name:'wenesday', value:'3', checked:false},
+    {name:'Thursday', value:'4', checked:false},
+    {name:'Friday', value:'5', checked:false},
+    {name:'Satday', value:'6', checked:false},
+    {name:'Sunday', value:'7', checked:false},
+  ];
+  week=1;
+  checkBoxdays;
+  recurringMonth="0";
+  recurringMonthDay=1;
+  recurringMonthMonth=1;
+  weekNo;
+  recurringMonthMonth2=1;
+  year=1;
+  recurringYear="0";
+  recurringYearmonth1;
+  recurringYearDate=1;
+  recurringYearWeekNo;
+  recurringYearDay;
+  recurringYearMonth;
   @Output() closePopup = new EventEmitter(); 
   constructor(private router: Router, private http: HttpClient, private oktaAuth: OktaAuthService, private globals: Globals){
     this.init();
@@ -118,6 +145,124 @@ export class createtaskComponent {
   notifychange(param){
     this.notify = param.target.checked;
   }
+  get selectedDays() { // right now: ['1','3']
+  console.log(this.days)  
+  return this.days
+              .filter(day => day.checked)
+              .map(day => day.value);
+  }
+  changeOnMtype(){
+    this.days = [    
+      {name:'Monday', value:'1', checked:false},
+      {name:'Tuesday', value:'2', checked:false},
+      {name:'wenesday', value:'3', checked:false},
+      {name:'Thursday', value:'4', checked:false},
+      {name:'Friday', value:'5', checked:false},
+      {name:'Satday', value:'6', checked:false},
+      {name:'Sunday', value:'7', checked:false},
+    ];
+  }
+  checkSubFields(mtype):any{
+    if(mtype==1){
+      if(this.isEmpty(this.recurringDayDay) || this.recurringDayDay <= 0 || this.recurringDayDay>30 ){
+        this.toast("please enter valid days")
+        return null;
+      }
+      return {
+        recurring_day: this.recurringDayDay
+      }
+    }
+    else if(mtype==2){
+      
+      if(this.selectedDays.length ==0)
+      {
+        this.toast("please select atleast one day")
+        return null;      
+      }
+      if(this.week<=0){
+        this.toast("please enter valid week");
+        return null;
+      }
+      return {
+        recurring_week: this.week,
+        recurring_days:this.selectedDays
+      }
+    }
+    else if(mtype == 5){
+      console.log(this.recurringMonth);
+      if(this.recurringMonth == "0"){
+        if(this.isEmpty(this.recurringMonthDay)){
+          return false;
+        }
+        if(this.isEmpty(this.recurringMonthMonth)){
+          return false;
+        }
+        return {
+          recurring_month :this.recurringMonthMonth,
+          recurring_day : this.recurringMonthDay
+        };
+      }
+      else{
+        if(this.isEmpty(this.weekNo)){
+          this.toast("please select week")
+          return false;
+        }
+        if(this.isEmpty(this.selectedDay)){
+          this.toast("please select day");
+          return false;
+        }
+        if(this.isEmpty(this.recurringMonthMonth2 || this.recurringMonthMonth2>30)){
+          this.toast("please enter valid month")
+          return false;
+        }
+        return {
+          recurring_week: this.weekNo,
+          recurring_day : this.selectedDay,
+          recurring_month: this.recurringMonthMonth2
+        };
+      }
+    }
+    else if(mtype == 6){
+      if(this.year<=0){
+        this.toast("please enter valid number of the years");
+        return false;
+      }
+      if(this.recurringYear="0"){
+        if(!this.recurringYearmonth1){
+          this.toast("please select month");
+          return false;
+        }
+        if(this.isEmpty(this.recurringYearDate) || this.recurringYearDate > 30 || this.recurringYearDate < 0){
+          this.toast("please enter valid date");
+          return false;
+        }        
+        return {
+          recurring_month : this.recurringYearmonth1,
+          recurring_date : this.recurringYearDate
+        }
+      }
+      else{
+        if(!this.recurringYearWeekNo){
+          this.toast("please select week");
+          return false;
+        }
+        if(!this.recurringYearMonth){
+          this.toast("please select month");
+          return false;
+        }
+        if(!this.recurringYearDay){
+          this.toast("please select day");
+          return false;
+        }
+      }
+    }
+  }
+  isEmpty(value):boolean{
+    if(value == '' || value==null || value == undefined){
+      return true;
+    }
+    return false;
+  }
   save(){
     console.log(this.notify)
     if(!this.mdescription){
@@ -125,6 +270,14 @@ export class createtaskComponent {
     }
     if(!this.mtype){
       this.mtype = null;
+    }
+    else{
+      if(this.checkSubFields(this.mtype)){
+        console.log('success');
+      }
+      else{
+        this.toast("Please enter subfields");
+      }
     }
     if(!this.mreminderdate){
       this.mreminderdate = null;
