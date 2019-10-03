@@ -55,8 +55,9 @@ class NotifyTaskReminder extends Command
         $tasks = new task;
         $tasks = $tasks->where('due_date','>',$todayDate) //send reminder until task is due
                         ->where('status_id','!=','4') //don't send email if task is completed
-                        ->where(function ($query) use ($todayDayNumber) {
-                            $query->where('type_id', '2')
+                        ->where('type_id', '1')
+                        ->orWhere(function ($query) use ($todayDayNumber) {
+                            $query->where('type_id', '4')
                                 ->where('type_data', $todayDayNumber);
                         })
                         ->orWhere(function ($query) use ($monthDayNumber) {

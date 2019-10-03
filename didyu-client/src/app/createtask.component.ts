@@ -48,6 +48,7 @@ export class createtaskComponent {
     {name:'Sunday', value:'7', checked:false},
   ];
   week=1;
+  weekDay=1;
   checkBoxdays;
   recurringMonth="0";
   recurringMonthDay=1;
@@ -164,28 +165,29 @@ export class createtaskComponent {
   }
   checkSubFields(mtype):any{
     if(mtype==1){
-      if(this.isEmpty(this.recurringDayDay) || this.recurringDayDay <= 0 || this.recurringDayDay>30 ){
-        this.toast("please enter valid days")
-        return null;
-      }
+      // if(this.isEmpty(this.recurringDayDay) || this.recurringDayDay <= 0 || this.recurringDayDay>30 ){
+      //   this.toast("please enter valid days")
+      //   return null;
+      // }
       return {
-        recurring_day: this.recurringDayDay
+        // recurring_day: this.recurringDayDay
+        recurring_day: mtype
       }
     }
     else if(mtype==4){
-      
-      if(this.selectedDays.length ==0)
+      if(!this.weekDay)
       {
         this.toast("please select atleast one day")
         return null;      
       }
-      if(this.week<=0){
-        this.toast("please enter valid week");
-        return null;
-      }
+      // if(this.week<=0){
+      //   this.toast("please enter valid week");
+      //   return null;
+      // }
       return {
-        recurring_week: this.week,
-        recurring_days:this.selectedDays
+        // recurring_week: this.week,
+        // recurring_days:this.selectedDays
+        recurring_day:this.weekDay
       }
     }
     else if(mtype == 5){
@@ -193,11 +195,11 @@ export class createtaskComponent {
         if(this.isEmpty(this.recurringMonthDay)){
           return null;
         }
-        if(this.isEmpty(this.recurringMonthMonth)){
-          return null;
-        }
+        // if(this.isEmpty(this.recurringMonthMonth)){
+        //   return null;
+        // }
         return {
-          recurring_month :this.recurringMonthMonth,
+          // recurring_month :this.recurringMonthMonth,
           recurring_day : this.recurringMonthDay
         };
       }
@@ -215,17 +217,17 @@ export class createtaskComponent {
           return null;
         }
         return {
-          recurring_week: this.weekNo,
+          // recurring_week: this.weekNo,
           recurring_day : this.selectedDay,
           recurring_month: this.recurringMonthMonth2
         };
       }
     }
     else if(mtype == 6){
-      if(this.year<=0){
-        this.toast("please enter valid number of the years");
-        return null;
-      }
+      // if(this.year<=0){
+      //   this.toast("please enter valid number of the years");
+      //   return null;
+      // }
       if(this.recurringYear="0"){
         if(!this.recurringYearmonth1){
           this.toast("please select month");
@@ -236,8 +238,9 @@ export class createtaskComponent {
           return null;
         }        
         return {
-          recurring_month : this.recurringYearmonth1,
-          recurring_date : this.recurringYearDate
+          recurring_day : this.recurringYearDate+'-'+this.recurringYearmonth1,
+          // recurring_month : this.recurringYearmonth1,
+          // recurring_date : this.recurringYearDate
         }
       }
       else{
@@ -320,15 +323,17 @@ export class createtaskComponent {
         notify : this.notify,
         recurring_data : this.recurringData
       }
+
+      // console.log(this.formdata);
       
-      // this.http.post(this.globals.baseUrl+'createtask',this.formdata,this.headers)
-      // .subscribe(
-      //     response => {
-      //       this.toast("New Task has been Created...");
-      //       window.location.reload();
-      //     },
-      //     error => this.errorMessage = <any>error
-      // );
+      this.http.post(this.globals.baseUrl+'createtask',this.formdata,this.headers)
+      .subscribe(
+          response => {
+            this.toast("New Task has been Created...");
+            window.location.reload();
+          },
+          error => this.errorMessage = <any>error
+      );
     }    
   }
 }

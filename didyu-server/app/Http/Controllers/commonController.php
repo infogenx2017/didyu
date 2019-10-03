@@ -129,7 +129,7 @@ class commonController extends Controller
         //$roles = role::where('name','user')->get();
         //$users = user::where('role_id',$roles[0]->id)->get();
         $users = user::all();
-        $type = type::get();
+        $type = type::where('status','1')->get();
         return response()->json(array('priority'=>$priority,'status'=>$status,'users'=>$users,'type'=>$type));
     }
 
@@ -148,6 +148,7 @@ class commonController extends Controller
             'description' => $request['description'],
             'user_id' => $request['user_id'],
             'type_id' => $request['type_id'],
+            'type_data' => $request['recurring_data']['recurring_day'],
             'priority_id' => $request['priority_id'],
             'status_id' => $request['status_id'],
             'due_date' => $request['due_date'],
