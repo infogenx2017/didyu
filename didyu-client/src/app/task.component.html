@@ -171,7 +171,7 @@
                             </div>
                             <div class="card-body input-border">
                                 <div class="row">
-                                    <div class="col-md-12 col-lg-12">     
+                                    <div class="col-md-12 col-lg-12 " >     
                                     <div class="form-group">
                                         <div class="row row-mat-top">
                                             <div class="col-md-12">
@@ -235,18 +235,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row row-mat-top">
-                                                <div class="col-md-4">
-                                                    <label class="form-label">Recurring</label>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <select [(ngModel)]="etype" (input)="etype=$event.target.value" class="form-control" name="t" placeholder="Type" *ngIf="type"  [disabled]="role!='admin'">
-                                                        <option *ngFor="let ty of type" value="{{ty.id}}">{{ty.name}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                     <div class="col-md-6 col-lg-6">     
                                             <div class="form-group">
@@ -271,8 +260,191 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+                                            <div class="form-group">
+                                                <div class="row row-mat-top">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Recurring</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select [(ngModel)]="etype" (input)="etype=$event.target.value" class="form-control" name="t"
+                                                            placeholder="Type" *ngIf="type" [disabled]="role!='admin'">
+                                                            <option *ngFor="let ty of type" value="{{ty.id}}">{{ty.name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div *ngIf="etype==1" class="col-md-12 col-lg-12">
+                                                <!-- for  Everry Day start-->
+                                                <div class="form-group ">
+                                                    <div class="row row-mat-top d-flex align-items-center px-2">
+                                                        <input type="radio" [(ngModel)]="recurringDay" name="recurringDay" id="every" value="every" checked>
+                                                        <label class="form-label px-2" for="every" >
+                                                                Every
+                                                            </label>
+                                                        <input type="number" id="days" [(ngModel)]="recurringDayDay" class="form-control number-input" [disabled]="recurringDay!='every'" min="1" max="31" maxlength="2" value="1">
+                                                        <label class="form-label px-2" for="days"> days</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row row-mat-top d-flex align-items-center px-2">
+                                                            <input  type="radio" [(ngModel)]="recurringDay" name="recurringDay" id="everyWeekday" value="everyWeekday">
+                                                            <label class="form-label px-2" for="everyWeekday">
+                                                                Every weekday
+                                                            </label>
+                                                </div>
+                                                 
+                                            </div>
+                                            <!-- for everyday end -->
+                                            <!-- for every week start -->
+                                            <div *ngIf="etype==4" class="col-md-12 col-lg-12">
+                                                
+                                                <div class="form-group">
+                                                    <div  class="row row-mat-top d-flex align-items-center px-2">
+                                                        
+                                                            <label class="form-label ">Recur Every</label>
+                                                            <input class="form-control number-input" [(ngModel)]="week" type="number" name="recurringWeek" id="every">
+                                                            <label class="form-label px-2" for="every">
+                                                                Week(s) on:
+                                                            </label>
+                                                        
+                            
+                                                    </div>
+                                                </div>
+                                                <div class="row row-mat-top d-flex align-items-center px-2">
+                                                    <div class="form-check-inline" *ngFor="let day of days">
+                                                        <input class="form-check-input" [(ngModel)]="day.checked" name="day.name" type="checkbox" value="day.value" >
+                                                        <label class="form-label px-2">
+                                                            {{day.name}}
+                                                        </label>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                            <!-- for every week end -->
+                                            <!-- for yearly start -->
+                                            <div *ngIf="etype==6" class="col-md-12 col-lg-12">
+                                                <div class="form-group">
+                                                    <div class="row row-mat-top d-flex align-items-center px-2">
+                                                            <label class="form-label px-2">Recur Every</label>
+                                                            <input class="form-control number-input px-2" [(ngModel)]="year" type="number" name="recurringWeek" id="every" value="every" checked>
+                                                            <label class="form-label px-2" for="every">
+                                                                year(s)
+                                                            </label>
+                                                    </div>
+                                                </div>
+                                                <!-- on row start -->
+                                                <div class="form-group">
+                                                    <div class="row row-mat-top d-flex align-items-center px-2">
+                                                            <input type="radio" [(ngModel)]="recurringYear" name="recurringYear" id="every" value="0" >
+                                                            <label class="form-label px-2" for="every">
+                                                                On
+                                                            </label>
+                                                            <select [(ngModel)]="recurringYearmonth1" (input)="recurringYearmonth1=$event.target.value" class="form-control col-md-4" name="month"
+                                                                placeholder="Type" *ngIf="type">
+                                                                <option [value]="undefined" selected disabled>select month</option>
+                                                                <option value="1">January</option>
+                                                                <option value="2">February</option>
+                                                                <option value="3">March</option>
+                                                                <option value="4">April</option>
+                                                                <option value="5">May</option>
+                                                                <option value="6">June</option>
+                                                                <option value="7">July</option>
+                                                                <option value="8">August</option>
+                                                                <option value="9">September</option>
+                                                                <option value="10">October</option>
+                                                                <option value="11">November</option>
+                                                                <option value="12">December</option>
+                                                            </select>
+                                                            <input class="form-control number-input px-2 " [(ngModel)]="recurringYearDate" type="number" name="date" id="date" value="1" maxlength="2" >
+                                                    </div>
+                                                </div>
+                                                <!-- on row end -->
+                                                <!-- on the row start -->
+                                                <div class="row row-mat-top d-flex align-items-center px-2">
+                                                    
+                                                        <input type="radio" [(ngModel)]="recurringYear" name="recurringYear" id="every" value="1" >
+                                                        <label class="form-label px-2" for="every">
+                                                            On the:
+                                                        </label>
+                                                    
+                                                    <div class="col-md-3">
+                                                        <select [(ngModel)]="recurringYearWeekNo" (input)="recurringYearWeekNo=$event.target.value" class="form-control" name="month" placeholder="Type">
+                                                            <option [value]="undefined" selected disabled>Select week</option>
+                                                            <option value="1">First</option>
+                                                            <option value="2">Second</option>
+                                                            <option value="3">Third</option>
+                                                            <option value="4">Fourth</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select [(ngModel)]="recurringYearDay" (input)="recurringYearDay=$event.target.value" class="form-control custom-select" name="day" placeholder="abc">
+                                                            <option [value]="undefined" selected disabled>Select day</option>
+                                                            <option value="1">Monday</option>
+                                                            <option value="2">Tuesday</option>
+                                                            <option value="3">Wensday</option>
+                                                            <option value="4">Thursday</option>
+                                                            <option value="5">Friday</option>
+                                                            <option value="6">Saturday</option>
+                                                            <option value="7">Sunday</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select [(ngModel)]="recurringYearMonth" (input)="recurringYearMonth=$event.target.value" class="form-control custom-select" name="month" placeholder="month">
+                                                            <option [value]="undefined" selected disabled>Select month</option>
+                                                            <option value="1">January</option>
+                                                            <option value="2">February</option>
+                                                            <option value="3">March</option>
+                                                            <option value="4">April</option>
+                                                            <option value="5">May</option>
+                                                            <option value="6">June</option>
+                                                            <option value="7">July</option>
+                                                            <option value="8">August</option>
+                                                            <option value="9">September</option>
+                                                            <option value="10">October</option>
+                                                            <option value="11">November</option>
+                                                            <option value="12">December</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- for yearly end -->
+                                            <!-- for monthly start -->
+                                            <div *ngIf="etype==5" class="col-md-12 col-lg-12">
+                                                <div class="form-group">
+                                                    <div class="row row-mat-top d-flex align-items-center px-2" >
+                                                        <input type="radio" [(ngModel)]="recurringMonth" id="radiomonth" name="radioMonth" value="0">
+                                                        <label for="radioday" class="form-label ml-2" name="every">Day</label>
+                                                        <input type="number" [(ngModel)]="recurringMonthDay" maxlength="2" class="form-control number-input ml-2" [disabled]="recurringMonth=='1'" value="1">
+                                                        <label class="form-label ml-2">Of Every</label>
+                                                        <input type="number" value="1" [(ngModel)]="recurringMonthMonth" class="form-control number-input" [disabled]="recurringMonth=='1'">
+                                                        <label class="form-label px-2">Month(s)</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                            
+                                                    <div class="row row-mat-top d-flex align-items-center px-2">
+                                                        <input type="radio" [(ngModel)]="recurringMonth" name="radioMonth" id="radioWeek" value="1">
+                                                        <label class="form-label px-2" for="every">
+                                                            On the:
+                                                        </label>
+                                                        <select [(ngModel)]="weekNo" [disabled]="recurringMonth=='0'" (input)="weekNo=$event.target.value" class="form-control col-md-3 ml-2" name="month"
+                                                            placeholder="Type">
+                                                            <option [value]="undefined" selected disabled>Select week</option>
+                                                            <option value="1">First</option>
+                                                            <option value="2">Second</option>
+                                                            <option value="3">Third</option>
+                                                            <option value="4">Fourth</option>
+                                                        </select>
+                                                        <select [(ngModel)]="selectedDay" [disabled]="recurringMonth=='0'" (input)="selectedDay=$event.target.value" class="form-control col-md-3 ml-2" name="day" placeholder="abc">
+                                                            <option [value]="undefined" selected disabled>Select day</option>
+                                                            <option *ngFor="let day of days" value="day.value">{{day.name}}</option>
+                                                            
+                                                        </select>
+                                                        <label class="form-label px-2">of every </label>
+                                                        <input type="number" [(ngModel)]="recurringMonthMonth2"class="form-control number-input" [disabled]="recurringMonth=='0'" value="1">
+                                                        <label class="form-label px-2">month(s)</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <div class="row tttnote" *ngIf="showNote">
                                         <div class="col-md-8 col-lg-8">
                                             <div class="ttnote">Note : {{currentNote}}</div>

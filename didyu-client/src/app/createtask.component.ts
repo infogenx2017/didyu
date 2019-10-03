@@ -34,6 +34,7 @@ export class createtaskComponent {
   private mreminderdate;notify
   private mexpecteddate;showTextbox;showTitlebox;
   // for the recurring type every day
+  recurringData;
   recurringDay = "every";
   recurringDayDay = 1;
   selectedDay;
@@ -146,7 +147,6 @@ export class createtaskComponent {
     this.notify = param.target.checked;
   }
   get selectedDays() { // right now: ['1','3']
-  console.log(this.days)  
   return this.days
               .filter(day => day.checked)
               .map(day => day.value);
@@ -172,7 +172,7 @@ export class createtaskComponent {
         recurring_day: this.recurringDayDay
       }
     }
-    else if(mtype==2){
+    else if(mtype==4){
       
       if(this.selectedDays.length ==0)
       {
@@ -189,13 +189,12 @@ export class createtaskComponent {
       }
     }
     else if(mtype == 5){
-      console.log(this.recurringMonth);
       if(this.recurringMonth == "0"){
         if(this.isEmpty(this.recurringMonthDay)){
-          return false;
+          return null;
         }
         if(this.isEmpty(this.recurringMonthMonth)){
-          return false;
+          return null;
         }
         return {
           recurring_month :this.recurringMonthMonth,
@@ -205,15 +204,15 @@ export class createtaskComponent {
       else{
         if(this.isEmpty(this.weekNo)){
           this.toast("please select week")
-          return false;
+          return null;
         }
         if(this.isEmpty(this.selectedDay)){
           this.toast("please select day");
-          return false;
+          return null;
         }
         if(this.isEmpty(this.recurringMonthMonth2 || this.recurringMonthMonth2>30)){
           this.toast("please enter valid month")
-          return false;
+          return null;
         }
         return {
           recurring_week: this.weekNo,
@@ -225,16 +224,16 @@ export class createtaskComponent {
     else if(mtype == 6){
       if(this.year<=0){
         this.toast("please enter valid number of the years");
-        return false;
+        return null;
       }
       if(this.recurringYear="0"){
         if(!this.recurringYearmonth1){
           this.toast("please select month");
-          return false;
+          return null;
         }
         if(this.isEmpty(this.recurringYearDate) || this.recurringYearDate > 30 || this.recurringYearDate < 0){
           this.toast("please enter valid date");
-          return false;
+          return null;
         }        
         return {
           recurring_month : this.recurringYearmonth1,
@@ -244,15 +243,20 @@ export class createtaskComponent {
       else{
         if(!this.recurringYearWeekNo){
           this.toast("please select week");
-          return false;
+          return null;
         }
         if(!this.recurringYearMonth){
           this.toast("please select month");
-          return false;
+          return null;
         }
         if(!this.recurringYearDay){
           this.toast("please select day");
-          return false;
+          return null;
+        }
+        return {
+          recurring_week_no : this.recurringYearWeekNo,
+          recurring_month : this.recurringYearMonth,
+          recurring_day : this.recurringYearDay
         }
       }
     }
@@ -264,7 +268,6 @@ export class createtaskComponent {
     return false;
   }
   save(){
-    console.log(this.notify)
     if(!this.mdescription){
       this.mdescription = null;
     }
@@ -272,13 +275,9 @@ export class createtaskComponent {
       this.mtype = null;
     }
     else{
-      if(this.checkSubFields(this.mtype)){
-        console.log('success');
-      }
-      else{
-        this.toast("Please enter subfields");
-      }
+       this.recurringData =this.checkSubFields(this.mtype)      
     }
+    
     if(!this.mreminderdate){
       this.mreminderdate = null;
     }
@@ -299,8 +298,12 @@ export class createtaskComponent {
     }
     else if(!this.mduedate){
       this.toast("Please enter due date");
-    }    
+    }
+    else if(!this.recurringData){
+      this.recurringData=null;
+    }
     else{
+      
       var mduedate = this.mduedate ? moment(new Date(this.mduedate)).format("YYYY-MM-DD") : null;
       var mreminderdate = this.mreminderdate ?  moment(new Date(this.mreminderdate)).format("YYYY-MM-DD") : null;
       var mexpecteddate = this.mexpecteddate ? moment(new Date(this.mexpecteddate)).format("YYYY-MM-DD") : null;
@@ -314,16 +317,18 @@ export class createtaskComponent {
         due_date : mduedate,
         reminder_date : mreminderdate,
         expected_date : mexpecteddate,
-        notify : this.notify
+        notify : this.notify,
+        recurring_data : this.recurringData
       }
-      this.http.post(this.globals.baseUrl+'createtask',this.formdata,this.headers)
-      .subscribe(
-          response => {
-            this.toast("New Task has been Created...");
-            window.location.reload();
-          },
-          error => this.errorMessage = <any>error
-      );
+      
+      // this.http.post(this.globals.baseUrl+'createtask',this.formdata,this.headers)
+      // .subscribe(
+      //     response => {
+      //       this.toast("New Task has been Created...");
+      //       window.location.reload();
+      //     },
+      //     error => this.errorMessage = <any>error
+      // );
     }    
   }
 }

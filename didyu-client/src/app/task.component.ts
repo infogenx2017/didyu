@@ -28,7 +28,32 @@ export class taskComponent {
   private options;priority;status;type;assignee;snote;currentNote;
   private currentPage;fduedate;notePopup;notePopupId;translateHeight;showNote;
   private safetyenvinstance;businesslocationfieldsvalues;safetytypefieldsvalues;valuestreamfieldsvalues;rrr;
-
+  recurringDay = "every";
+  recurringDayDay = 1;
+  selectedDay;
+  days = [    
+    {name:'Monday', value:'1', checked:false},
+    {name:'Tuesday', value:'2', checked:false},
+    {name:'wenesday', value:'3', checked:false},
+    {name:'Thursday', value:'4', checked:false},
+    {name:'Friday', value:'5', checked:false},
+    {name:'Satday', value:'6', checked:false},
+    {name:'Sunday', value:'7', checked:false},
+  ];
+  week=1;
+  checkBoxdays;
+  recurringMonth="0";
+  recurringMonthDay=1;
+  recurringMonthMonth=1;
+  weekNo;
+  recurringMonthMonth2=1;
+  year=1;
+  recurringYear="0";
+  recurringYearmonth1;
+  recurringYearDate=1;
+  recurringYearWeekNo;
+  recurringYearDay;
+  recurringYearMonth;
   date: Date = new Date();
 	settings = {
 		bigBanner: true,
