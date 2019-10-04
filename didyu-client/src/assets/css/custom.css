@@ -380,6 +380,10 @@ pre {
   color: rgb(56, 72, 149) !important;
   background: #f6d249 !important;
 }
+
+.scheduler_default_cell { background-color: #dfdfdf !important;}
+.scheduler_default_cell.scheduler_default_cell_business { background-color: #fff !important;}
+
 .scheduler_default_timeheadergroup, .scheduler_default_timeheadercol {
   color: rgb(56, 72, 149) !important;
   background: #f6d249 !important;
