@@ -10,19 +10,20 @@
         background-color: #f3f2f2 !important;
         border: 0px solid #d1d3e2!important;
     }
+    .menu-editor{max-width: 550px;}
 </style>
- <div class="container-fluid create-task">
+ <div class="container-fluid create-task menu-editor">
     <div class="card shadow mb-4 list">
        <div class="card-body input-border">
           <div class="row">
              <div class="col-md-12">
-                    <h2>Create title</h2>
+                    <h2>Create SubTask</h2>
                 <div class="row">                    
                    <div class="col-md-8">
                       <div class="breadcrumb">
                          <div class="col-md-12">
-                                <select (ngModel)="category_id" (input)="category_id=$event.target.value" class="form-control custom-select" name="t" placeholder="Category ">
-                                        <option value="">Please choose category</option>
+                                <select (ngModel)="category_id" (input)="category_id=$event.target.value" class="form-control custom-select" name="t" placeholder="Task">
+                                        <option value="">Please choose task</option>
                                         <option *ngFor="let category of titleCategories" value="{{category.id}}">{{category.name}}</option>
                                 </select>
                          </div>
@@ -31,7 +32,7 @@
                    <div class="col-md-8">
                         <div class="breadcrumb">
                            <div class="col-md-12">
-                              <input type="text" (ngModel)="title" (input)="title=$event.target.value"  class="form-control" name="t" placeholder="Enter the category name here...">
+                              <input type="text" (ngModel)="title" (input)="title=$event.target.value"  class="form-control" name="t" placeholder="Enter the subtask name here...">
                            </div>
                         </div>
                      </div>

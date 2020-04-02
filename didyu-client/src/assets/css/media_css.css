@@ -17,7 +17,7 @@
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 /* Styles */
 .login-logo-css {
-    width: 174px;
+    width:310px;
 }
 form.user .btn-user{
 	margin: .75rem 0rem;
@@ -56,7 +56,8 @@ form.user .btn-user{
 }
 .text-gray-6001{
 	width: 100%;
-    margin-top: -35px;
+    margin-top:0px;
+text-align:center !important;
 }
 .btn-member-sty {
     width: 69%;
@@ -129,6 +130,49 @@ form.user .btn-user{
 .sidebar .nav-item .nav-link span{
 	    font-size: 0.95rem;
 }
+
+.card-header.py-3{
+min-height:174px;
+}
+.createPopup{
+width:100% !important;
+top:4% !important;
+left:0% !important;
+overflow-x:hidden;
+overflow-y:auto;
+max-height:600px;
+}
+
+.btn-icon-split .text{
+padding:.185rem 0.35rem !important;
+font-size:10px!important;
+}
+
+.btn-icon-split .icon{
+padding:.185rem 0.5rem !important;
+font-size:10px !important
+
+}
+.countBar .btn-secondary{
+margin-left:-13px !important;
+position:relative;
+left:1rem;
+}
+
+.mobile-login{
+display:none;
+}
+.topbar .dropdown .dropdown-menu{
+width:calc(100% - -1.5rem) !important;
+
+}
+
+
+
+
+
+
+
 
 
 

@@ -65,9 +65,10 @@
                             </div>
                             <select class="selectpicker form-control border-remove-right" (ngModel)="filterTask" (input)="filterTask=$event.target.value">
                                 <option value="">ALL TASKS</option>
-                                <option value="INPROGRESS">INPROGRESS</option>
-                                <option value="OVERDUE">OVERDUE</option>
-                                <option value="COMPLETED">COMPLETED</option>
+                                <option value="Due">Due</option>
+                                <option value="Overdue">Overdue</option>
+                                <option value="Completed">Completed</option>
+  				<option value="Escalated">Escalated</option>
                             </select>
                         </div>
                     </div>
@@ -111,7 +112,7 @@
                         </tr>                        
                     </thead>
                     <tbody>
-                        <tr *ngFor="let task of tasks|customFilter:filterTask|customPriorityFilter:filterTaskByPriority|dateFilter:fduedate|titleFilter:searchTask; let idx = index" class="odd">
+                        <tr *ngFor="let task of tasks|customFilter:filterTask|prorityFilter:filterTaskByPriority|dateFilter:fduedate|titleFilter:searchTask; let idx = index" class="odd">
                             <td class="tasklist" (click)="showEditTask(task)">{{task.title}}</td>
                             <td align="center" class="tasklist"><span class="table-css-img-left"><img src="assets/img/person-small.jpg" class="person-small"></span>{{task.assignee}}</td>
                             <td class="low-css tasklist" [ngStyle]="assignPriorityColor(task.priorityColor)">{{task.priority}}</td>

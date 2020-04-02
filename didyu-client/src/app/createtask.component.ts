@@ -4,6 +4,8 @@ import { OktaAuthService } from '@okta/okta-angular';
 import { RouterModule, Router } from '@angular/router';
 import { Globals } from './global';
 import * as moment from 'moment';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 @Component({
   selector: 'createtask-root',
@@ -30,9 +32,21 @@ export class createtaskComponent {
   private mpriority;
   private mtype;
   private mstatus;
+  private moverdue;
   private mduedate;
-  private mreminderdate;notify
+  private mreminderdate;status_notify;overdue_notify;
   private mexpecteddate;showTextbox;showTitlebox;
+  private recurenddate;
+  od_periods = [
+      {day:'1',text:'1 day'},
+      {day:'2',text:'2 days'},
+      {day:'3',text:'3 days'},
+      {day:'4',text:'4 days'},
+      {day:'5',text:'5 days'},
+      {day:'6',text:'6 days'},
+      {day:'7',text:'Week'},
+      {day:'30',text:'Month'},
+  ];
   // for the recurring type every day
   recurringData;
   recurringDay = "every";
@@ -41,34 +55,58 @@ export class createtaskComponent {
   days = [    
     {name:'Monday', value:'1', checked:false},
     {name:'Tuesday', value:'2', checked:false},
-    {name:'wenesday', value:'3', checked:false},
+    {name:'Wednesday', value:'3', checked:false},
     {name:'Thursday', value:'4', checked:false},
     {name:'Friday', value:'5', checked:false},
-    {name:'Satday', value:'6', checked:false},
+    {name:'Saturday', value:'6', checked:false},
     {name:'Sunday', value:'7', checked:false},
   ];
-  week=1;
-  weekDay=1;
+  second_weekdays = [    
+    {name:'Monday', value:'1', checked:false},
+    {name:'Wednesday', value:'3', checked:false},
+    {name:'Friday', value:'5', checked:false},
+  ];
+  weekday;
+  second_weekday;
+  week;
+  recurringMonthDate;
+  recurringMonth;
+  recurringYearDate;
+  recurringYearMonth;
   checkBoxdays;
-  recurringMonth="0";
-  recurringMonthDay=1;
+  recurringMonthDay;
   recurringMonthMonth=1;
   weekNo;
   recurringMonthMonth2=1;
   year=1;
   recurringYear="0";
   recurringYearmonth1;
-  recurringYearDate=1;
   recurringYearWeekNo;
   recurringYearDay;
-  recurringYearMonth;
+
+  /** Recurring variable **/
+  isrecurring=0;
+  is_recurring=0; //for database
+  recurring_type = ''; //for database
+  recurring_when = ''; //for database
+  recurring_end_date = null; //for database
+  /** Recurring variable **/
+
+  /** select2 options **/
+  public select2_options_data;
+  public select2_options = Options;
+  public select3_options = Options;
+  public show_titles;
+  /** select2 options **/
+
   @Output() closePopup = new EventEmitter(); 
   constructor(private router: Router, private http: HttpClient, private oktaAuth: OktaAuthService, private globals: Globals){
     this.init();
     this.getOptions();
     this.getTitles();
     this.showTextbox = false;
-    this.notify = false;
+    this.status_notify = false;
+    this.overdue_notify = false;
     this.showTitlebox = false;
   }
   async init() {
@@ -76,10 +114,31 @@ export class createtaskComponent {
     this.headers = new Headers({
         Authorization: 'Bearer ' + this.accessToken
     });
+
+    this.show_titles = false;
+
+    this.select2_options = {
+      //width: '500',
+      tags: true,
+      placeholder: 'Create Category'
+    };
+
+    this.select3_options = {
+      //width: '500',
+      tags: true,
+      placeholder: 'Create Title'
+    };
   }
 
   showText(){
     this.showTextbox = true;
+  }
+
+  showCreateCat(){
+    if(this.mcat == 'add') {
+      this.showTextbox = true;
+      this.closePopup.emit(false);
+    }
   }
 
   showTitle(){
@@ -123,7 +182,8 @@ export class createtaskComponent {
       );
   }
 
-  getTitles(){
+  /** old --- 08/12/2019 **/
+  /*getTitles(){
     this.http.get(this.globals.baseUrl+'categoriesTitle')
     .subscribe( 
       response => {
@@ -135,6 +195,72 @@ export class createtaskComponent {
     .subscribe( (data) => {
       this.titles = data
      });
+  }*/
+  /** old --- 08/12/2019 **/
+
+  getTitles(){
+      this.http.get(this.globals.baseUrl+'getCategories')
+      .subscribe( 
+        response => {
+          this.categories = response,
+          this.show_titles = false
+        },
+        error => {}
+      );
+  }
+
+  categoryChanged(cat) {
+      this.show_titles = false;
+      this.mtitle = '';
+      if(cat != null) {
+          this.formdata = {
+            catid : cat,
+          }
+
+          this.http.post(this.globals.baseUrl+'addOrUpdateCategory',this.formdata,this.headers)
+          .subscribe( 
+            response => {
+              //console.log(response);
+              this.categories = response
+            },
+            error => {}
+          );
+
+          this.formdata = {
+            catid : cat,
+          }
+
+          this.http.post(this.globals.baseUrl+'getTitlesOfCategory',this.formdata,this.headers)
+          .subscribe( (data) => {
+            this.titles = data;
+            this.mcat = cat;
+            this.show_titles = true;
+          });
+      } else {
+          this.show_titles = false;
+      }
+  }
+
+  titleChanged(title) {
+      this.show_titles = false;
+      if(title != null && this.mcat != null) {
+          this.formdata = {
+            catid : this.mcat,
+            title : title
+          }
+
+          this.http.post(this.globals.baseUrl+'addOrUpdateTitle',this.formdata,this.headers)
+          .subscribe( 
+            response => {
+              //console.log(response);
+              this.titles = response;
+              this.show_titles = true;
+            },
+            error => {}
+          );
+      } else {
+          this.show_titles = true;
+      }
   }
 
   toast(message) {
@@ -144,141 +270,131 @@ export class createtaskComponent {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
 
-  notifychange(param){
-    this.notify = param.target.checked;
+  changeStatusNotify(param){
+    this.status_notify = param.target.checked;
   }
-  get selectedDays() { // right now: ['1','3']
-  return this.days
-              .filter(day => day.checked)
-              .map(day => day.value);
+
+  changeOverdueNotify(param){
+    this.overdue_notify = param.target.checked;
+  }
+
+  selectedDays() { // right now: ['1','3']
+      return this.days
+          .filter(day => day.checked)
+          .map(day => day.value);
   }
   changeOnMtype(){
     this.days = [    
       {name:'Monday', value:'1', checked:false},
       {name:'Tuesday', value:'2', checked:false},
-      {name:'wenesday', value:'3', checked:false},
+      {name:'Wednesday', value:'3', checked:false},
       {name:'Thursday', value:'4', checked:false},
       {name:'Friday', value:'5', checked:false},
-      {name:'Satday', value:'6', checked:false},
+      {name:'Saturday', value:'6', checked:false},
       {name:'Sunday', value:'7', checked:false},
     ];
   }
-  checkSubFields(mtype):any{
-    if(mtype==1){
-      // if(this.isEmpty(this.recurringDayDay) || this.recurringDayDay <= 0 || this.recurringDayDay>30 ){
-      //   this.toast("please enter valid days")
-      //   return null;
-      // }
-      return {
-        // recurring_day: this.recurringDayDay
-        recurring_day: mtype
+
+  getRecurringData(recurringType) {
+      if(recurringType == 1) {
+          this.recurring_type = 'Every Day';
+          this.recurring_when = '';
+          var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+          this.recurring_end_date = recurenddate;
+      } else if(recurringType == 2) {
+          const selectedDays = this.selectedDays();
+          if(selectedDays.length == 0) {
+              return 'error';
+          } else {
+              this.recurring_type = 'Every Weekday';
+              this.recurring_when = selectedDays.toString();
+              var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+              this.recurring_end_date = recurenddate;
+          }
+          /*if(!this.weekday || this.weekday == 0) {
+              return 'error';
+          } else {
+              this.recurring_type = 'Every Weekday';
+              this.recurring_when = this.weekday;
+              var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+              this.recurring_end_date = recurenddate;
+          }*/
+      } else if(recurringType == 3) {
+          if(!this.second_weekday || this.second_weekday == 0) {
+              return 'error';
+          } else {
+              this.recurring_type = 'Every Second Weekday';
+              this.recurring_when = this.second_weekday;
+              var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+              this.recurring_end_date = recurenddate;
+          }
+      } else if(recurringType == 4) {
+          if(!this.week || this.week == 0) {
+              return 'error';
+          } else {
+              this.recurring_type = 'Weekly';
+              this.recurring_when = this.week;
+              var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+              this.recurring_end_date = recurenddate;
+          }
+      } else if(recurringType == 5) {
+          if(!this.recurringMonthDate || this.recurringMonthDate == 0) {
+              return 'error';
+          } else if(!this.recurringMonth || this.recurringMonth == 0) {
+              return 'error';
+          } else {
+              this.recurring_type = 'Monthly';
+              this.recurring_when = this.recurringMonthDate+'-'+this.recurringMonth;
+              var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+              this.recurring_end_date = recurenddate;
+          }
+      } else if(recurringType == 6) {
+          if(!this.recurringYearDate || this.recurringYearDate == 0) {
+              return 'error';
+          } else if(!this.recurringYearMonth || this.recurringYearMonth == 0) {
+              return 'error';
+          } else {
+              this.recurring_type = 'Annually';
+              this.recurring_when = this.recurringYearDate+'-'+this.recurringYearMonth;
+              var recurenddate = this.recurenddate ?  moment(new Date(this.recurenddate)).format("YYYY-MM-DD") : null;
+              this.recurring_end_date = recurenddate;
+          }
       }
-    }
-    else if(mtype==4){
-      if(!this.weekDay)
-      {
-        this.toast("please select atleast one day")
-        return null;      
-      }
-      // if(this.week<=0){
-      //   this.toast("please enter valid week");
-      //   return null;
-      // }
-      return {
-        // recurring_week: this.week,
-        // recurring_days:this.selectedDays
-        recurring_day:this.weekDay
-      }
-    }
-    else if(mtype == 5){
-      if(this.recurringMonth == "0"){
-        if(this.isEmpty(this.recurringMonthDay)){
-          return null;
-        }
-        // if(this.isEmpty(this.recurringMonthMonth)){
-        //   return null;
-        // }
-        return {
-          // recurring_month :this.recurringMonthMonth,
-          recurring_day : this.recurringMonthDay
-        };
-      }
-      else{
-        if(this.isEmpty(this.weekNo)){
-          this.toast("please select week")
-          return null;
-        }
-        if(this.isEmpty(this.selectedDay)){
-          this.toast("please select day");
-          return null;
-        }
-        if(this.isEmpty(this.recurringMonthMonth2 || this.recurringMonthMonth2>30)){
-          this.toast("please enter valid month")
-          return null;
-        }
-        return {
-          // recurring_week: this.weekNo,
-          recurring_day : this.selectedDay,
-          recurring_month: this.recurringMonthMonth2
-        };
-      }
-    }
-    else if(mtype == 6){
-      // if(this.year<=0){
-      //   this.toast("please enter valid number of the years");
-      //   return null;
-      // }
-      if(this.recurringYear="0"){
-        if(!this.recurringYearmonth1){
-          this.toast("please select month");
-          return null;
-        }
-        if(this.isEmpty(this.recurringYearDate) || this.recurringYearDate > 30 || this.recurringYearDate < 0){
-          this.toast("please enter valid date");
-          return null;
-        }        
-        return {
-          recurring_day : this.recurringYearDate+'-'+this.recurringYearmonth1,
-          // recurring_month : this.recurringYearmonth1,
-          // recurring_date : this.recurringYearDate
-        }
-      }
-      else{
-        if(!this.recurringYearWeekNo){
-          this.toast("please select week");
-          return null;
-        }
-        if(!this.recurringYearMonth){
-          this.toast("please select month");
-          return null;
-        }
-        if(!this.recurringYearDay){
-          this.toast("please select day");
-          return null;
-        }
-        return {
-          recurring_week_no : this.recurringYearWeekNo,
-          recurring_month : this.recurringYearMonth,
-          recurring_day : this.recurringYearDay
-        }
-      }
-    }
   }
+
   isEmpty(value):boolean{
     if(value == '' || value==null || value == undefined){
       return true;
     }
     return false;
   }
+
   save(){
     if(!this.mdescription){
       this.mdescription = null;
     }
-    if(!this.mtype){
-      this.mtype = null;
+
+    if(this.isrecurring == 0){
+      this.is_recurring = 0;
+      this.recurring_type = '';
+      this.recurring_when = '';
+      this.recurring_end_date = null;
     }
     else{
-       this.recurringData =this.checkSubFields(this.mtype)      
+      if(!this.mtype){
+          this.toast('Select recurring type');
+          return false;
+      } else if(!this.recurenddate) {
+          this.toast('Select recurring end date');
+          return false;
+      } else {
+          this.is_recurring = 1;
+          this.recurringData =this.getRecurringData(this.mtype);
+          if(this.recurringData == 'error') {
+              this.toast('Kindly give all the appropriate details');
+              return false;
+          }
+      }
     }
     
     if(!this.mreminderdate){
@@ -299,32 +415,35 @@ export class createtaskComponent {
     else if(!this.mstatus){
       this.toast("Please choose status");
     }
+    /*else if(!this.moverdue){
+      this.toast("Please choose overdue period");
+    }*/
     else if(!this.mduedate){
       this.toast("Please enter due date");
     }
-    else if(!this.recurringData){
-      this.recurringData=null;
-    }
     else{
-      
       var mduedate = this.mduedate ? moment(new Date(this.mduedate)).format("YYYY-MM-DD") : null;
       var mreminderdate = this.mreminderdate ?  moment(new Date(this.mreminderdate)).format("YYYY-MM-DD") : null;
       var mexpecteddate = this.mexpecteddate ? moment(new Date(this.mexpecteddate)).format("YYYY-MM-DD") : null;
       this.formdata = {
-        title : this.mtitle,
-        description : this.mdescription,
-        user_id : this.massignee,
-        type_id : this.mtype,
-        priority_id : this.mpriority,
-        status_id : this.mstatus,
-        due_date : mduedate,
-        reminder_date : mreminderdate,
-        expected_date : mexpecteddate,
-        notify : this.notify,
-        recurring_data : this.recurringData
+          title : this.mtitle,
+          description : this.mdescription,
+          user_id : this.massignee,
+          created_by: localStorage.getItem('userId'),
+          type_id : this.mtype,
+          priority_id : this.mpriority,
+          status_id : this.mstatus,
+          overdue: this.moverdue,
+          due_date : mduedate,
+          reminder_date : mreminderdate,
+          expected_date : mduedate,
+          is_recurring : this.is_recurring,
+          status_notify : this.status_notify,
+          overdue_notify : this.overdue_notify,
+          recurring_type : this.recurring_type,
+          recurring_when : this.recurring_when,
+          recurring_end_date : this.recurring_end_date
       }
-
-      // console.log(this.formdata);
       
       this.http.post(this.globals.baseUrl+'createtask',this.formdata,this.headers)
       .subscribe(
@@ -337,6 +456,7 @@ export class createtaskComponent {
     }    
   }
 }
+
 
 
 

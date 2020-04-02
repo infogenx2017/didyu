@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { OktaAuthService } from '@okta/okta-angular';
 import { RouterModule, Router } from '@angular/router';
@@ -20,13 +20,20 @@ export class sideBarComponent {
   private formdata;
   private currentUser;
   private showClass;
+  private taskSubClass;
   private users;
+  private createUserPopup;
+  private showCreateTask;
+  @Output() closePopup = new EventEmitter();
+
   baseUrl = 'http://13.234.116.80:4206/';
   constructor(private router: Router, private http: HttpClient, private oktaAuth: OktaAuthService, private globals: Globals){
     this.init();
     this.checkIsLogin();
     this.checkUser();
     this.getUsers();
+    this.createUserPopup = false;
+    this.showCreateTask = false;
   }
 
   async init() {
@@ -47,6 +54,30 @@ export class sideBarComponent {
           },
           error => {this.toast("Login Failed...");}
       );
+  }
+
+  createUser(){
+    this.createUserPopup = true;
+  }
+
+  setshowCreateUser(e){
+    if(e){
+      this.createUserPopup = e;
+    } else {
+      this.createUserPopup = !this.createUserPopup;
+    }
+  }
+
+  setshowCreateTask(e){
+    if(e){
+      this.showCreateTask = e;
+    } else {
+      this.showCreateTask = !this.showCreateTask;
+    }
+  }
+
+  cancel(){
+    this.closePopup.emit(false);
   }
 
   checkIsLogin(){
@@ -74,6 +105,11 @@ export class sideBarComponent {
   changeClass(){
     this.showClass = !this.showClass;
   }
+
+  changeTaskMenu(){
+    this.taskSubClass = !this.taskSubClass;
+  }
+
   toast(message) {
       this.alertMessage = message;
       var x = document.getElementById("snackbar");
@@ -82,7 +118,13 @@ export class sideBarComponent {
   }
 
   changeMember(userId){
-    this.router.navigate(['/tasks/'+userId]);
+    console.log(userId);
+    if(userId == '' || userId == 'undefined') {
+        this.router.navigate(['/tasklist']);
+    } else {
+        this.router.navigate(['/tasklist/'+userId]);
+    }
+    
     setTimeout(function(){
       window.location.reload();
     })
@@ -103,6 +145,7 @@ export class sideBarComponent {
      });  
   }
 }
+
 
 
 

@@ -7,6 +7,8 @@ import * as moment from 'moment';
 })
 export class MyFilterPipe implements PipeTransform {
     transform(items: any[], filter: Object): any {
+	//console.log('filter items',items);
+        //console.log('filter',filter);
         if (!items || !filter) {
             return items;
         }
@@ -80,5 +82,20 @@ export class CategoryFilterPipe implements PipeTransform {
         // filter items array, items which match and return true will be
         // kept, false will be filtered out
         return items.filter(item => item.category_id.toString().indexOf(filter) !== -1);
+    }
+}
+
+@Pipe({
+    name: 'prorityFilter',
+    pure: false
+})
+export class PriorityFilterPipe implements PipeTransform {
+    transform(items: any[], filter: Object): any {
+        if (!items || !filter) {
+            return items;
+        }
+        // filter items array, items which match and return true will be
+        // kept, false will be filtered out
+        return items.filter(item => item.priority.toString().indexOf(filter) !== -1);
     }
 }

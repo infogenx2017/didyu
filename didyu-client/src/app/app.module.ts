@@ -24,12 +24,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { OktaAuthModule, OktaCallbackComponent } from '@okta/okta-angular';
 import { Role,registerService } from './register.service';
-import { MyFilterPipe, MyPriorityFilterPipe, TitleFilterPipe,CategoryFilterPipe } from './customFilter.js';
+import { MyFilterPipe, TitleFilterPipe, CategoryFilterPipe, PriorityFilterPipe } from './customFilter.js';
 import { DateFilterPipe } from './customFilter.js';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import { menueditorComponent } from './menueditor.component';
+import { editcategoryComponent } from './editcategory.component';
+import { editTitleComponent } from './edittitle.component';
+import { createUserComponent } from './createuser.component';
+import { NgSelect2Module } from 'ng-select2';
 
 // import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -62,7 +67,11 @@ const appRoutes: Routes = [
   { path: 'calendar', component: calendarComponent },
   { path: 'title', component: titleComponent },
   { path: 'category', component: titleCategoryComponent },
-  { path: 'tasklist', component: taskListComponent },
+  { path: 'tasklist', component: taskListComponent,children :[
+    {
+      path : ":id",component:taskListComponent
+    }
+  ] },
   { path: 'tasks', component: taskComponent,children :[
     {
       path : ":id",component:taskComponent
@@ -92,10 +101,14 @@ const appRoutes: Routes = [
     createCategoryComponent,
     createTitleComponent,
     MyFilterPipe,
-    MyPriorityFilterPipe,
     DateFilterPipe,
     TitleFilterPipe,
-    CategoryFilterPipe
+    CategoryFilterPipe,
+    PriorityFilterPipe,
+    menueditorComponent,
+    editcategoryComponent,
+    editTitleComponent,
+    createUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,10 +126,12 @@ const appRoutes: Routes = [
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    NgSelect2Module
   ],
   providers: [Globals,DataService],
   bootstrap: [AppComponent],
   exports: [calendarComponent]
 })
 export class AppModule { }
+

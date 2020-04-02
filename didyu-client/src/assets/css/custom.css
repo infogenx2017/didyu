@@ -6,6 +6,7 @@
     font-size: 20px;
 }
 
+
 #snackbar {
     visibility: hidden;
     min-width: 250px;
@@ -178,17 +179,24 @@ side-bar {
 }
 .searchBar{
   position: absolute;
-  top: 1%;
+  top: 4%;
   left: 4%;
 }
 .countBar{
-  position: absolute;
-  top: 2%;
-  left: 21%;
+  float: left;
 }
 
+.row_new {
+  width: 100%;
+  display: inline-block;
+  margin: 0px;
+  padding: 15px 15px 0px;
+}
+
+.priorityFilter{float: right;}
+
 .countBar .btn-secondary {
-    margin-right: 25px;
+    margin-right: 15px;
 }
 .breadcrumb .btn-secondary {
     margin-right: 10px;
@@ -366,7 +374,8 @@ pre {
   font-weight: bold;
 }
 .span-color-sty{
-  font-family: monospace;
+  font-family: CandaraReg;
+  font-size: 15px;
 }
 .notifybox{
   border-radius: 4px;
@@ -381,8 +390,40 @@ pre {
   background: #f6d249 !important;
 }
 
-.scheduler_default_cell { background-color: #dfdfdf !important;}
-.scheduler_default_cell.scheduler_default_cell_business { background-color: #fff !important;}
+.scheduler_default_rowheader.parent_row {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.scheduler_default_cell {
+  background: #5a5c69 !important;
+}
+
+.scheduler_default_cell.scheduler_default_cell_business.not_available {
+  background: #0202022e !important;
+}
+
+.scheduler_default_cell.scheduler_default_cell_business {
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.parent_row .scheduler_default_rowheader_inner_text {
+    text-transform: uppercase;
+    padding-right: 28px;
+}
+
+.child_row .scheduler_default_rowheader_inner_text {
+    font-size: 13px;
+    padding-right: 28px;
+}
+
+.scheduler_default_timeheader_float_inner {
+    font-size: 15px;
+}
+
+input.form-control.data_wise_search {
+    background: #fff;
+}
 
 .scheduler_default_timeheadergroup, .scheduler_default_timeheadercol {
   color: rgb(56, 72, 149) !important;
@@ -400,11 +441,22 @@ pre {
   background: none !important;
 }
 
+.scheduler_default_event_inner{
+  color: #000000 !important;
+}
+
 div[aria-label='I'] {
   background-color: rgb(255, 152, 0) !important;
 }
 
-div[aria-label='I'] div, div[aria-label='C'] div, div[aria-label='E'] div, div[aria-label='O'] div, div[aria-label='D'] div {
+div[aria-label='D'] {
+  background-color: rgb(255,255,136) !important;
+}
+
+div[aria-label='Y'] {
+  background-color: rgb(13, 63, 67) !important;
+}
+div[aria-label='I'] div, div[aria-label='D'] div, div[aria-label='C'] div, div[aria-label='E'] div, div[aria-label='O'] div, div[aria-label='D'] div, div[aria-label='Y'] div {
   padding-left: 25px;
 }
 
@@ -420,12 +472,30 @@ div[aria-label='O'] {
   background-color: rgb(220, 84, 84) !important;
 }
 
-div[aria-label='D'] {
-  background-color: #a1a1a1 !important;
-}
 .zin{
   z-index: 9999;
 }
 .topbar .dropdown .dropdown-menu {
     max-height: 425px !important;
+}
+
+.create-task-class{
+    top: 50%; transform: translateY(-50%); -moz-transform: translateY(-50%); -webkit-transform: translateY(-50%); 
+}
+
+.create-task-class i{
+    margin-top: 0px;
+}
+
+@media only screen and (max-width: 767px) {
+  .scheduler_default_corner, .scheduler_default_rowheader_scroll, .scheduler_default_rowheader_scroll > div, .scheduler_default_rowheader_scroll > div > div, .scheduler_default_rowheader {
+      width: 100% !important;
+  }
+  .left_calblock {
+      position: relative !important;
+      width: 100% !important;
+  }
+  .right_calblock {
+      margin-left: 0px !important;
+  }
 }
