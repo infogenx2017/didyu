@@ -1,0 +1,128 @@
+<style>
+    select, textarea, input{
+        font-size: 1rem !important;
+        color: #6e707e !important;
+    }
+    .cancelButton{
+        margin-left: 6%;
+    }
+    .form-control{
+        background-color: #f3f2f2 !important;
+        border: 0px solid #d1d3e2!important;
+    }
+</style>
+<div class="container-fluid create-user menu-editor">
+    <div class="card shadow mb-4 list">
+       <div class="card-body input-border">
+          <div class="row">
+             <div class="col-md-12">
+                    <h2>Create Staff</h2>
+                <div class="row">                    
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Name</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" (ngModel)="name" (input)="name=$event.target.value"  class="form-control" name="t" placeholder="Enter the member name here...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" (ngModel)="email" (input)="email=$event.target.value"  class="form-control" name="t" placeholder="Enter the member email here...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Password</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="password" (ngModel)="password" (input)="password=$event.target.value"  class="form-control" name="t" placeholder="Enter the member password here...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Mobile</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="number" (ngModel)="mobile" (input)="mobile=$event.target.value"  class="form-control" name="t" placeholder="Enter the member mobile here...">
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">User Type</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="role" (input)="role=$event.target.value" class="form-control" name="t" placeholder="Status" *ngIf="roles">
+                                    <option value="">Please choose user type</option>
+                                    <option *ngFor="let r of roles" value="{{r.id}}">{{r.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Department</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="department" (input)="department=$event.target.value" class="form-control" name="t" placeholder="Department" *ngIf="departments">
+                                    <option value="">Please choose department</option>
+                                    <option *ngFor="let d of departments" value="{{d.id}}">{{d.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Role</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="designation" (input)="designation=$event.target.value" class="form-control" name="t" placeholder="Designation" *ngIf="designations">
+                                    <option value="">Please choose role</option>
+                                    <option *ngFor="let de of designations" value="{{de.id}}">{{de.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Status</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="status" (input)="status=$event.target.value" class="form-control" name="t" placeholder="Designation">
+                                    <option value="">Please choose status</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+             </div>
+             <div class="col-md-12 button-my-sty">
+                <button type="button" class="btn btn-success cursorPointer" (click)="save()">SAVE &amp;  CLOSE</button>
+                <button type="button" class="btn btn-danger cancelButton" (click)="cancel()">CANCEL</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <div id="snackbar">{{alertMessage}}</div>

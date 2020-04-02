@@ -1,0 +1,138 @@
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+/* Styles */
+
+.ml-md-3, .mx-md-3 {
+    margin-left: 0rem!important;
+}
+.sidebar .nav-item .collapse {
+    background: #4c5fba!important;
+}
+}
+
+
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+/* Styles */
+.login-logo-css {
+    width: 174px;
+}
+form.user .btn-user{
+	margin: .75rem 0rem;
+}
+.login-overflow-hidden{
+	overflow:auto !important;
+}
+.table-bordered td, .table-bordered th{
+	font-size: 7px !important;
+}
+.table-css-img-left {
+    float: left;
+    width: 100%;
+}
+.bottom-sty-css1 {
+    width: 1.5rem;
+    height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    background: #4254a7;
+    color: #fff !important;
+    border-radius: 100%;
+    padding: 0.5rem;
+    border: 0px solid;
+    margin: 0px 12px 0px 14px;
+}
+.table-responsive{
+	    margin-top: 3rem;
+}
+.col-md-1-mobile{
+	    float: left;
+    width: 45%;
+}
+.border-line-css{
+	display:none;
+}
+.text-gray-6001{
+	width: 100%;
+    margin-top: -35px;
+}
+.btn-member-sty {
+    width: 69%;
+    float: left;
+    border: 1px solid #3f4252;
+    border-top-left-radius: 32px;
+    border-bottom-left-radius: 32px;
+    border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+    font-size: 12px;
+    border-right-style: solid;
+    position: relative;
+    left: 14px;
+}
+.topbar .nav-item .nav-link{
+	padding: 0 0.25rem !important;
+}
+.tabs-sty{
+	    width: 50%;
+    float: left;
+}
+.mr-3, .mx-3{
+	    margin-right: 0rem!important;
+}
+.col-md-1-mobile {
+       width: 50%!important;
+}
+.col-md-1-mobile-1{
+	    float: left;
+    width: 40%;
+}
+.sidebar{
+	    position: absolute;
+    z-index: 10000000000;
+	    min-height: 100%!important;
+}
+.icon.text-white-50{
+	    border-left: 0px solid #fff;
+}
+
+.breadcrumb{
+    text-align: center;
+	border:none;
+}
+.card-header{
+	    text-align: center;
+}
+
+.table thead th{
+	    vertical-align: middle;
+}
+.table td, .table th{
+	    padding: .25rem;
+}
+.custom-control-label::before{
+    top: -0.4rem;
+    width: 2.5rem;
+    height: 2.3rem;
+}
+.tabs .btn-warning{
+	border-radius:0px !important;
+}
+.tabs .btn-danger-can{
+	border-radius:0px !important;
+}
+.tabs .btn{
+	padding: .015rem 0.25rem;
+	font-size: 0.6rem;
+}
+.sidebar .nav-item .nav-link span{
+	    font-size: 0.95rem;
+}
+
+
+
+
+
+}

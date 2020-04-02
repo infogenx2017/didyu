@@ -1,0 +1,341 @@
+<style>
+    select,
+    textarea,
+    input {
+        font-size: 1rem !important;
+        color: #6e707e !important;
+    }
+    
+    .cancelButton {
+        margin-left: 6%;
+    }
+    
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .number-input {
+        display: inline !important;
+        width: 2em;
+        margin-left: 2em;
+    }
+    label{
+      margin: initial;  
+    }
+    .form-control {
+        background-color: #f3f2f2 !important;
+        border: 0px solid #d1d3e2 !important;
+    }
+    .notify_label {
+        float: right; 
+    }
+    .notify_span_class {
+        margin-left: 0px;
+    }/style>
+<div class="container-fluid create-task">
+    <div class="card shadow mb-4 list">
+        <div class="card-body input-border">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="breadcrumb category_selection">
+                                <!-- <div class="col-md-2">
+                                    <i class="far fa-plus-square" (click)="showText()" title="Add Category" style="margin-right: 11px;"></i>
+                                    <i class="far fa-plus-square" (click)="showTitle()" title="Add Sub Category"></i>
+                                </div> -->
+                                <div class="col-md-12">
+                                    <!-- <select (ngModel)="mtitle" (input)="mtitle=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " *ngIf="categories">
+                                        <optgroup *ngFor="let cat of categories" label="{{cat.name}}">
+                                            <option *ngFor="let title of titles|catFilter:cat.id" value="{{title.id}}">
+                                            {{title.name}}</option>
+                                        </optgroup>
+                                    </select> -->
+                                    <ng-select2 [data]="categories" [options]="select2_options" [width]="500" (valueChanged)="categoryChanged($event)">
+                                    </ng-select2>
+                                </div>
+                                <div class="col-md-12" *ngIf="show_titles">
+                                    <ng-select2 [data]="titles" [options]="select3_options" [width]="500" [(ngModel)]="mtitle" (valueChanged)="titleChanged($event)">
+                                    </ng-select2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="out">
+                                <div class="check-box" style="padding-bottom: 28px;">
+                                    <input type="checkbox" id="chek11" [(ngModel)]="status_notify" (change)="changeStatusNotify($event)">
+                                    <label class="notify_label" for="chek11"><span class="notify_span_class">Notify supervisor of change in status</span></label>
+                                </div>
+                                <div class="check-box">
+                                    <input type="checkbox" id="chek12" [(ngModel)]="overdue_notify" (change)="changeOverdueNotify($event)">
+                                    <label class="notify_label" for="chek12"><span class="notify_span_class">Notify supervisor if task is overdue</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea id="message" name="phone" class="form-control textarea-sty-css" placeholder="Write details about the task..." (ngModel)="mdescription" (input)="mdescription=$event.target.value"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Assign to</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="massignee" (input)="massignee=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " *ngIf="assignee">
+                                    <option value="">Please choose assignee</option>
+                                    <option *ngFor="let assigne of assignee" value="{{assigne.id}}">{{assigne.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Due date</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" [ngModel]="mduedate" #datePicker (input)="mduedate=$event.target.value" bsDatepicker (ngModelChange)="mduedate = datePicker.value" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Recurring</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="checkbox" id="is_recurring" [(ngModel)]="isrecurring" [value]="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="isrecurring==1">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Recurring Type</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select [(ngModel)]="mtype" (input)="mtype=$event.target.value" (change)="changeOnMtype()" class="form-control" name="t" placeholder="Type" *ngIf="type">
+                                    <option [value]="undefined" selected disabled>Please choose type</option>
+                                    <option *ngFor="let ty of type" value="{{ty.id}}">{{ty.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="isrecurring==1">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Recurring End Date</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" [ngModel]="recurenddate" #datePicker3 (input)="recurenddate=$event.target.value" bsDatepicker (ngModelChange)="recurenddate = datePicker3.value" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Priority</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="mpriority" (input)="mpriority=$event.target.value" class="form-control" name="t" placeholder="Priority" *ngIf="priority">
+                                    <option value="">Please choose priority</option>
+                                    <option *ngFor="let pri of priority" value="{{pri.id}}">{{pri.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Reminder date</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" [ngModel]="mreminderdate" #datePicker3 (input)="mreminderdate=$event.target.value" bsDatepicker (ngModelChange)="mreminderdate = datePicker3.value" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row row-mat-top">
+                            <div class="col-md-4">
+                                <label class="form-label">Status</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select (ngModel)="mstatus" (input)="mstatus=$event.target.value" class="form-control" name="t" placeholder="Status" *ngIf="status">
+                                    <option value="">Please choose status</option>
+                                    <option *ngFor="let st of status" value="{{st.id}}">{{st.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <div class="row row-mat-top">
+                          <div class="col-md-4">
+                             <label class="form-label">Overdue</label>
+                          </div>
+                          <div class="col-md-8">
+                             <select (ngModel)="moverdue" (input)="moverdue=$event.target.value" class="form-control" name="t" placeholder="Overdue">
+                             <option value="">Please choose overdue period</option>
+                             <option *ngFor="let period of od_periods" value="{{period.day}}">{{period.text}}</option>
+                             </select>
+                          </div>
+                       </div>
+                    </div> -->
+                </div>
+
+                <!-- Every Weekday -->
+                <div *ngIf="mtype==2&&isrecurring==1" class="col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <div  class="row row-mat-top d-flex align-items-center px-2">
+                            <label class="form-label ">Every Weekday on:</label>
+                        </div>
+                    </div>
+                    <div class="row row-mat-top d-flex align-items-center px-2">
+                        <div class="form-check-inline" *ngFor="let day of days">
+                            <input class="form-check-input" [(ngModel)]="weekday" name="week_day" type="radio" [value]="day.value" >
+                            <label class="form-label px-2">
+                                {{day.name}}
+                            </label>
+                        </div>                        
+                    </div>
+                </div>
+                <!-- Every Weekday -->
+
+                <!-- Every Second Weekday -->
+                <div *ngIf="mtype==3&&isrecurring==1" class="col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <div  class="row row-mat-top d-flex align-items-center px-2">
+                            <label class="form-label ">Every Second Weekday on:</label>
+                        </div>
+                    </div>
+                    <div class="row row-mat-top d-flex align-items-center px-2">
+                        <div class="form-check-inline" *ngFor="let day of second_weekdays">
+                            <input class="form-check-input" [(ngModel)]="second_weekday" name="second_week_day" type="radio" [value]="day.value" >
+                            <label class="form-label px-2">
+                                {{day.name}}
+                            </label>
+                        </div>                        
+                    </div>
+                </div>
+                <!-- Every Second Weekday -->
+
+                <!-- Weekly -->
+                <div *ngIf="mtype==4&&isrecurring==1" class="col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <div  class="row row-mat-top d-flex align-items-center px-2">
+                            <label class="form-label ">Every Week On:</label>
+                        </div>
+                    </div>
+                    <div class="row row-mat-top d-flex align-items-center px-2">
+                        <div class="form-check-inline">
+                            <input class="form-check-input" [(ngModel)]="week" name="week" type="radio" [value]="5" >
+                            <label class="form-label px-2">
+                                Friday
+                            </label>
+                        </div>                        
+                    </div>
+                </div>
+                <!-- Weekly -->
+
+                <!-- Monthly -->
+                <div *ngIf="mtype==5&&isrecurring==1" class="col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="row row-mat-top d-flex align-items-center px-2" >
+                            <!-- <input type="radio" [(ngModel)]="recurringMonth" id="radiomonth" name="radioMonth" value="0" checked style="display: none"> -->
+                            <label class="form-label px-2" for="every">
+                               Recurring on day
+                            </label>
+                            <input class="form-control number-input px-2 " [(ngModel)]="recurringMonthDate"  (input)="recurringMonthDate=$event.target.value" type="number" name="date" id="date" value="1" maxlength="2" >
+                            <label class="form-label px-2" for="every">
+                                of month
+                             </label>
+                            <select [(ngModel)]="recurringMonth" (input)="recurringMonth=$event.target.value" class="form-control col-md-4" name="month" placeholder="Month">
+                               <option [value]="undefined" selected disabled>Select Month</option>
+                               <option value="1">January</option>
+                               <option value="2">February</option>
+                               <option value="3">March</option>
+                               <option value="4">April</option>
+                               <option value="5">May</option>
+                               <option value="6">June</option>
+                               <option value="7">July</option>
+                               <option value="8">August</option>
+                               <option value="9">September</option>
+                               <option value="10">October</option>
+                               <option value="11">November</option>
+                               <option value="12">December</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- Monthly -->
+
+                <!-- Yearly -->
+                <div *ngIf="mtype==6&&isrecurring==1" class="col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="row row-mat-top d-flex align-items-center px-2">
+                            <!-- <input type="radio" [(ngModel)]="recurringYear" name="recurringYear" id="every" value="0" checked style="display: none"> -->
+                            <label class="form-label px-2" for="every">
+                               Recurring on day
+                            </label>
+                            <input class="form-control number-input px-2 " [(ngModel)]="recurringYearDate"  (input)="recurringYearDate=$event.target.value" type="number" name="date" id="date" value="1" maxlength="2" >
+                            <label class="form-label px-2" for="every">
+                                of month
+                             </label>
+                            <select [(ngModel)]="recurringYearMonth" (input)="recurringYearMonth=$event.target.value" class="form-control col-md-4" name="year_month" placeholder="Type">
+                                <option [value]="undefined" selected disabled>Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 button-my-sty">
+                <button type="button" class="btn btn-success cursorPointer" (click)="save()">SAVE &amp;
+                    CLOSE</button>
+                <button type="button" class="btn btn-danger cancelButton" (click)="cancel()">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="snackbar">{{alertMessage}}</div>
+
+<div *ngIf="showTextbox">
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createcategory-root (saveclose)="getTitles()" (closePopup)='setshowCreateTask($event)'>
+        </createcategory-root>
+    </div>
+</div>
+
+
+<div *ngIf="showTitlebox">
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createtitle-root (saveclose)="getTitles()" (closePopup)='setshowCreateTitle($event)'></createtitle-root>
+    </div>
+</div>
+

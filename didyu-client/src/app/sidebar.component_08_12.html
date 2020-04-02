@@ -1,0 +1,63 @@
+<!--Side navbar-nav Start-->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center">
+            <div class="sidebar-brand-icon rotate-n-10">
+                <img src="assets/img/nav-img.png" class="nav-sty-img" id="sidebarToggle">
+            </div>
+            <div class="sidebar-brand-text"><img src="assets/img/logo.png" class="login-logo-css-dashboard"></div>
+        </a>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item" >
+            <a class="nav-link" routerLink="/tasklist">
+            <i class="fas fa-layer-group"></i>
+            <span title="Overview">Calendar view</span></a>
+        </li>
+	<li class="nav-item active cursorPointer">
+            <a class="nav-link collapsed" (click)="setshowCreateTask()">
+            <i class="fa fa-th-large"></i>
+            <span title="Create Task">Create Task</span></a>
+        </li>
+	<!-- <li class="nav-item active cursorPointer">
+            <a class="nav-link collapsed" data-toggle="collapse" data-target="#taskMenu" aria-expanded="true" aria-controls="taskMenu" (click)="changeTaskMenu()">
+            <i class="fa fa-th-large"></i>
+            <span title="My tasks">My tasks</span>
+            </a>
+            <div id="taskMenu" class="collapse" [ngClass]="{'show':taskSubClass}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="py-2 collapse-inner rounded">
+                    <a class="collapse-item" routerLink="/tasks">Tasks</a>
+                    <a class="collapse-item" (click)="createUser()">Create Task</a>
+                </div>
+            </div>
+        </li> -->
+        <li class="nav-item cursorPointer"  *ngIf="role=='admin'" title="Members">
+            <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" (click)="changeClass()">
+            <i class="fas fa-user-friends"></i>
+            <span>Staff List</span>
+            </a>
+            <div id="collapseTwo" class="collapse" [ngClass]="{'show':showClass}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="py-2 collapse-inner rounded bg-white userdropdown">
+                    <a class="collapse-item" (click)="changeMember(user.id)" *ngFor="let user of users"><span><img src="assets/img/person-small.jpg" class="person-small"></span>{{user.name}}</a>
+		    <a class="collapse-item" (click)="createUser()">Create Staff</a>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+    
+<!-- Side navbar-nav Stop-->	
+<!-- <div id="snackbar">{{alertMessage}}</div> -->
+
+
+<div *ngIf="createUserPopup">
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createuser-root (closePopup)='setshowCreateUser($event)'></createuser-root>
+    </div>
+</div>
+
+<div *ngIf="showCreateTask">
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createtask-root (closePopup)='setshowCreateTask($event)' ></createtask-root>
+    </div>
+</div>

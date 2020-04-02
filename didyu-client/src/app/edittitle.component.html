@@ -1,0 +1,49 @@
+<style>
+    select, textarea, input{
+        font-size: 1rem !important;
+        color: #6e707e !important;
+    }
+    .cancelButton{
+        margin-left: 6%;
+    }
+    .form-control{
+        background-color: #f3f2f2 !important;
+        border: 0px solid #d1d3e2!important;
+    }
+.menu-editor{max-width: 550px;}
+</style>
+ <div class="container-fluid create-task menu-editor">
+    <div class="card shadow mb-4 list">
+       <div class="card-body input-border">
+          <div class="row">
+             <div class="col-md-12">
+                    <h2>Edit title</h2>
+                <div class="row">                    
+                   <div class="col-md-8">
+                      <div class="breadcrumb">
+                         <div class="col-md-12">
+                                <select (ngModel)="category_id" (input)="titleid=this" (input)="category_id=$event.target.value" class="form-control custom-select" name="t" placeholder="Category" *ngIf="titleCategories" [value]="cat_id">
+                                        <option value="0">Please choose category</option>
+                                        <option *ngFor="let category of titleCategories" value="{{category.id}}">{{category.name}}</option>
+                                </select>
+                         </div>
+                      </div>
+                   </div>
+                   <div class="col-md-8">
+                        <div class="breadcrumb">
+                           <div class="col-md-12">
+                              <input type="text" (ngModel)="title" (input)="titleid=this" (input)="title=$event.target.value" class="form-control" name="t" placeholder="Enter the category name here..." [value] = "selectedTitle" >
+                           </div>
+                        </div>
+                     </div>
+                </div>
+             </div>
+             <div class="col-md-12 button-my-sty">
+                <button type="button" class="btn btn-success cursorPointer" (click)="update()">UPDATE &amp;  CLOSE</button>
+                <button type="button" class="btn btn-danger cancelButton" (click)="cancel()">CANCEL</button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <div id="snackbar">{{alertMessage}}</div>

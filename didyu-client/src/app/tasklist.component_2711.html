@@ -1,0 +1,168 @@
+<style>
+select, textarea, input{
+    font-size: 1rem !important;
+    color: #6e707e !important;
+}
+.cancelButton{
+    margin-left: 6%;
+}
+.toolbar button {background: #f6d249;border: 0px;padding: 5px 15px;outline: none;color: #3a4c93;}
+.toolbar i.fa-arrow-left {margin-right: 7px;font-size: 13px;}
+.toolbar i.fa.fa-arrow-right {margin-left: 7px;font-size: 13px;}
+.toolbar {background: #f6d249;}
+</style>
+<div class="row_new">
+<div class="countBar">
+    <a class="btn btn-secondary btn-icon-split" [ngStyle]="assignColor(count.color)" *ngFor="let count of taskCount">
+        <div (click)="filterEventsByStatus(count.id)">
+        <span class="text">{{count.name}}</span>
+        <span class="icon text-white-50">
+        <i class="fas">{{count.taskCount}}</i>
+        </span>
+        </div>
+    </a>
+    <a class="btn btn-secondary btn-icon-split" [ngStyle]="assignColor('#5a5c69')">
+        <div (click)="filterEventsByStatus(0)">
+        <span class="text">All</span>
+        </div>
+    </a>
+</div>
+
+<div class="priorityFilter">
+    <select (ngModel)="mpriority" (input)="mpriority=$event.target.value" (change)="filterEvents($event)" class="form-control" name="t" placeholder="Priority" *ngIf="priority" [value]='0'>
+    <option value="0" selected>Filter by Priority</option>
+    <option *ngFor="let pri of priority" value="{{pri.id}}">{{pri.name}}</option>
+    </select>
+</div>
+</div>
+
+<div *ngIf="showCreateTask" >
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createtask-root (closePopup)='setshowCreateTask($event)' ></createtask-root>
+    </div>
+</div>
+
+<div *ngIf="showMenuEditor" >
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <menueditor-root (closePopup)='setshowMenuEditor($event)' ></menueditor-root>
+        <!-- <div class="container-fluid create-task">
+            <div class="card shadow mb-4 list">
+               <div class="card-body input-border">
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                           <div class="col-md-8">
+                              <div class="breadcrumb">                         
+                                <div class="col-md-1">
+                                    <i class="far fa-plus-square" (click)="showText()"></i>
+                                </div>
+                                 <div class="col-md-11">
+                                    <select (ngModel)="mcat" (input)="mcat=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " *ngIf="categories" [value]="mcat">
+                                        <option value="">Please choose category</option>
+                                        <option *ngFor="let cat of categories" value="{{cat.id}}">{{cat.name}}</option>
+                                    </select>
+                                 </div>
+                                 
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row" *ngIf="mcat&&titles">
+                            <div class="col-md-8">
+                               <div class="breadcrumb">   
+                                <div class="col-md-1">
+                                    <i class="far fa-plus-square" (click)="showTitle()"></i>
+                                </div>                       
+                                  <div class="col-md-11">
+                                     <select (ngModel)="mtitle" (input)="mtitle=$event.target.value" class="form-control custom-select" name="t" placeholder="Assigned to " [value]="0">
+                                         <option value="0">Please choose title</option>
+                                         <option *ngFor="let title of titles|catFilter:mcat" value="{{title.name}}">{{title.name}}</option>
+                                     </select>
+                                  </div>
+                                  
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 button-my-sty">
+                        <button type="button" class="btn btn-success cursorPointer" (click)="save()">SAVE &amp;  CLOSE</button>
+                        <button type="button" class="btn btn-danger cancelButton" (click)="cancel()">CANCEL</button>
+                    </div>
+                  </div>
+               </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+<div class="toolbar">
+    <button (click)="previous()"><i class="fa fa-arrow-left"></i>Previous</button>
+    <button (click)="next()" style="float: right;"><i class="fa fa-arrow-right"></i>Next</button>
+</div>
+<daypilot-scheduler [config]="config" [events]="events" #scheduler></daypilot-scheduler>
+
+<div *ngIf="editTask" >
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <div class="container-fluid create-task">
+            <div class="card shadow mb-4 list">
+                <div class="card-header py-3">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-layer-group"></i>Update task</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body input-border">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">       
+                            <div class="form-group">
+                                <div class="row row-mat-top">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Status</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select [(ngModel)]="estatus" (input)="estatus=$event.target.value" class="form-control" name="t" placeholder="Status" *ngIf="status">
+                                            <option *ngFor="let st of status" value="{{st.id}}" >{{st.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="text-left">
+                            <button type="submit" class="btn btn-success" (click)="save()">SAVE &amp;  CLOSE</button>
+                            <button type="submit" class="btn btn-danger cancelButton"  (click)="cancel()">CANCEL</button>
+                            </div>                                  
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </div>
+</div>
+                    
+  <div id="snackbar">{{alertMessage}}</div> 
+
+
+
+<div *ngIf="showTextbox">
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createcategory-root (saveclose)="getTitles()" (closePopup)='setshowCreateTask($event)' ></createcategory-root>
+    </div>
+</div>
+    
+    
+<div *ngIf="showTitlebox">
+    <div class="overlay-bg"></div>
+    <div class="createPopup">
+        <createtitle-root (saveclose)="getTitles()" (closePopup)='setshowCreateTitle($event)' ></createtitle-root>
+    </div>
+</div>
+<script>
+$(function(){
+    console.log($('.scheduler_default_tree_image_collapse').parent());
+});
+</script>
