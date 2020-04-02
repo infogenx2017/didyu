@@ -35,10 +35,18 @@ Route::get('/designation', 'commonController@designation');
 Route::post('/adddesignation', 'commonController@adddesignation');
 Route::post('/changestatus', 'commonController@changestatus');
 Route::post('/changerole', 'commonController@changerole');
-Route::get('getOptions','commonController@getOptions');
+Route::get('/getOptions','commonController@getOptions');
 Route::post('/addNote', 'commonController@addNote');
 Route::post('/deleteNote', 'commonController@deleteNote');
 
+/** create user options **/
+
+Route::get('/getRoles', 'commonController@getRoles');
+Route::get('/getDepartments', 'commonController@getDepartments');
+Route::get('/getDesignations', 'commonController@getDesignations');
+Route::post('/adduser', 'commonController@addUser');
+
+/** create user options **/
 
 Route::post('/createtask', 'commonController@createtask');
 Route::post('/gettask', 'commonController@gettask');
@@ -53,14 +61,23 @@ Route::post('addtitle','commonController@addtitle');
 Route::get('/titles', 'commonController@titles');
 Route::post('/deletetitle','commonController@deletetitle');
 Route::post('/updatetitle','commonController@updatetitle');
-Route::post('addcategory','commonController@addcategory');
+Route::post('/addcategory','commonController@addcategory');
 Route::get('/categories', 'commonController@categories');
 Route::post('/deletecategory','commonController@deletecategory');
-Route::post('/updatecategory','commonController@updatecategory');
+Route::post('/updatecategory','commonController@updateCategory');
 Route::get('/categoriesTitle', 'commonController@categoriesTitle');
 Route::get('/getevents', 'commonController@getevents');
-Route::get('sendbasicemail2','commonController@sendEmail');
-
+Route::post('/filterEvents', 'commonController@filterEvents');
+Route::get('/sendbasicemail2','commonController@sendEmail');
+Route::get('/overduealert','commonController@alertOverdue');
+Route::post('/categoryname','commonController@getCategoryName');
+Route::post('/categorytitlename','commonController@getCatTitleName');
+Route::post('/filterEventsByStatus', 'commonController@filterEventsByStatus');
+Route::post('/getUserTasks', 'commonController@getUserTasks');
+Route::get('/getCategories', 'commonController@getCategories');
+Route::post('addOrUpdateCategory', 'commonController@addOrUpdateCategory');
+Route::post('/getTitlesOfCategory', 'commonController@getTitlesOfCategory');
+Route::post('/addOrUpdateTitle', 'commonController@addOrUpdateTitle');
 
 Route::get('testEmail', function ()
 {

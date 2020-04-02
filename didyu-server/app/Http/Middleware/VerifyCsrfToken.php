@@ -18,7 +18,7 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array
      */
-    private $openRoutes = ['doSignUp','doLogin','logout','isLogin','changestatus','userrole','changerole','createtask','gettaskCount','gettask','reset','updatepassword','updatetask','deletetask','deleteUser','notifications','addNote','deleteNote','addtitle','deletetitle','updatetitle','addcategory','deletecategory','updatecategory'];
+    private $openRoutes = ['doSignUp','doLogin','logout','isLogin','changestatus','userrole','changerole','createtask','gettaskCount','gettask','reset','updatepassword','updatetask','deletetask','deleteUser','notifications','addNote','deleteNote','addtitle','deletetitle','updatetitle','addcategory','deletecategory','updatecategory','filterEvents','categoryname','categorytitlename','filterEventsByStatus','adduser','getUserTasks','getCategories','addOrUpdateCategory','getTitlesOfCategory','addOrUpdateTitle'];
     protected $except = [
         '/doSignUp',
         '/doLogin',
@@ -43,6 +43,17 @@ class VerifyCsrfToken extends Middleware
         '/updatetitle',
         '/addcategory',
         '/deletecategory',
-        '/updatecategory'
+        '/updatecategory',
+        '/filterEvents',
+        '/categoryname',
+        '/categorytitlename',
+        '/filterEventsByStatus',
+	'/adduser',
+	'/getUserTasks',
+	'/getCategories',
+        '/addOrUpdateCategory',
+        '/getTitlesOfCategory',
+        '/addOrUpdateTitle'
     ];
 }
+

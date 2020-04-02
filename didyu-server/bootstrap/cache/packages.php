@@ -1,16 +1,16 @@
 <?php return array (
+  'nesbot/carbon' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Carbon\\Laravel\\ServiceProvider',
+    ),
+  ),
   'barryvdh/laravel-cors' => 
   array (
     'providers' => 
     array (
       0 => 'Barryvdh\\Cors\\ServiceProvider',
-    ),
-  ),
-  'beyondcode/laravel-dump-server' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
   'fideloper/proxy' => 
@@ -27,11 +27,11 @@
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
-  'nesbot/carbon' => 
+  'beyondcode/laravel-dump-server' => 
   array (
     'providers' => 
     array (
-      0 => 'Carbon\\Laravel\\ServiceProvider',
+      0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
   'nunomaduro/collision' => 
