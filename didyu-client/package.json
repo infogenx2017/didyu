@@ -30,7 +30,7 @@
     "bootstrap": "^4.3.1",
     "calendar-utils": "0.0.59",
     "core-js": "^2.6.9",
-    "css-loader": "^2.1.1",
+    "css-loader": "^6.7.3",
     "date-fns": "^1.28.5",
     "daypilot-pro-angular": "https://npm.daypilot.org/daypilot-pro-angular/trial/2019.3.4012.tar.gz",
     "flatpickr": "^4.6.2",
@@ -47,7 +47,7 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.9",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/cli": "^7.3.9",
     "@angular/compiler-cli": "^7.2.15",
     "@angular/language-service": "^7.2.15",
@@ -63,7 +63,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
-    "style-loader": "^0.23.1",
+    "style-loader": "^3.3.1",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.2.2"
